@@ -25,6 +25,19 @@ $(BIN)/exec/instance_parser_exec : $(BIN)/instance/instance.o \
 
 instance_parser_exec : $(BIN)/exec/instance_parser_exec
 
+$(BIN)/test/instance_test : $(BIN)/instance/instance.o \
+                            $(BIN)/test/instance_test.o
+	@echo "--> Linking objects..."
+	$(CPP) -o $@ $^ $(CARGS) $(INC)
+	@echo
+	@echo "--> Running test..."
+	$(BIN)/test/instance_test
+	@echo
+
+instance_test : $(BIN)/test/instance_test
+
+tests : instance_test
+
 execs : instance_parser_exec
 
-all : execs
+all : tests execs
