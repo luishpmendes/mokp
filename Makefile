@@ -66,10 +66,24 @@ $(BIN)/test/nsga2_solver_test : $(BIN)/instance/instance.o \
 
 nsga2_solver_test : $(BIN)/test/nsga2_solver_test
 
+$(BIN)/exec/nsga2_solver_exec : $(BIN)/instance/instance.o \
+                                $(BIN)/solution/solution.o \
+                                $(BIN)/solver/solver.o \
+                                $(BIN)/solver/nsga2/problem.o \
+                                $(BIN)/solver/nsga2/nsga2_solver.o \
+                                $(BIN)/utils/argument_parser.o \
+                                $(BIN)/exec/nsga2_solver_exec.o
+	@echo "--> Linking objects..."
+	$(CPP) -o $@ $^ $(CARGS) $(INC)
+	@echo
+
+nsga2_solver_exec : $(BIN)/exec/nsga2_solver_exec
+
 tests : instance_test \
-        solution_test \
+    	solution_test \
 		nsga2_solver_test
 
-execs : instance_parser_exec
+execs : instance_parser_exec \
+		nsga2_solver_exec
 
 all : tests execs
