@@ -150,6 +150,19 @@ $(BIN)/test/mhaco_solver_test : $(BIN)/instance/instance.o \
 
 mhaco_solver_test : $(BIN)/test/mhaco_solver_test
 
+$(BIN)/exec/mhaco_solver_exec : $(BIN)/instance/instance.o \
+                                $(BIN)/solution/solution.o \
+                                $(BIN)/solver/solver.o \
+                                $(BIN)/solver/mhaco/problem.o \
+                                $(BIN)/solver/mhaco/mhaco_solver.o \
+                                $(BIN)/utils/argument_parser.o \
+                                $(BIN)/exec/mhaco_solver_exec.o
+	@echo "--> Linking objects..."
+	$(CPP) -o $@ $^ $(CARGS) $(INC)
+	@echo
+
+mhaco_solver_exec : $(BIN)/exec/mhaco_solver_exec
+
 tests : instance_test \
         solution_test \
 		nsga2_solver_test \
@@ -160,6 +173,7 @@ tests : instance_test \
 execs : instance_parser_exec \
 		nsga2_solver_exec \
 		nspso_solver_exec \
-		moead_solver_exec
+		moead_solver_exec \
+		mhaco_solver_exec
 
 all : tests execs
