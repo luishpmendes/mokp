@@ -1,0 +1,226 @@
+#!/bin/bash
+
+instances=(zlt_100_2 zlt_250_2 zlt_500_2 zlt_750_2 zlt_100_3 zlt_250_3 zlt_500_3 zlt_750_3 zlt_100_4 zlt_250_4 zlt_500_4 zlt_750_4)
+solvers=(nsga2 nspso moead mhaco ihs nsbrkga)
+seeds=(776505114 187342467 815887906 815887906 728692796)
+
+num_processes=10
+
+time_limit=3600
+population_size=1000
+max_num_solutions=2500
+max_num_snapshots=60
+
+mkdir -p statistics
+mkdir -p solutions
+mkdir -p pareto
+mkdir -p best_solutions_snapshots
+mkdir -p num_non_dominated_snapshots
+mkdir -p num_fronts_snapshots
+mkdir -p populations_snapshots
+mkdir -p num_elites_snapshots
+mkdir -p hypervolume
+mkdir -p hypervolume_snapshots
+
+commands=()
+
+for ((i=0;i<num_processes;i++))
+do
+    commands[$i]="("
+done
+
+i=0
+
+for instance in ${instances[@]}
+do
+    for solver in ${solvers[@]}
+    do
+        for seed in ${seeds[@]}
+        do
+            command="./bin/exec/${solver}_solver_exec "
+            command+="--instance instances/${instance}.txt "
+            command+="--seed ${seed} "
+            command+="--time-limit ${time_limit} "
+            command+="--max-num-solutions ${max_num_solutions} "
+            command+="--max-num-snapshots ${max_num_snapshots} "
+            command+="--population-size ${population_size} "
+            command+="--statistics statistics/${instance}_${solver}_${seed}.txt "
+            command+="--solutions solutions/${instance}_${solver}_${seed}_ "
+            command+="--pareto pareto/${instance}_${solver}_${seed}.txt "
+            command+="--best-solutions-snapshots best_solutions_snapshots/${instance}_${solver}_${seed}_ "
+            command+="--num-non-dominated-snapshots num_non_dominated_snapshots/${instance}_${solver}_${seed}.txt "
+            command+="--num-fronts-snapshots num_fronts_snapshots/${instance}_${solver}_${seed}.txt "
+            command+="--populations-snapshots populations_snapshots/${instance}_${solver}_${seed}_ "
+            if [ $solver = "nspso" ]
+            then
+                command+="--memory "
+            fi
+            if [ $solver = "moead" ]
+            then
+                command+="--preserve-diversity "
+            fi
+            if [ $solver = "mhaco" ]
+            then
+                command+="--memory "
+            fi
+            if [ $solver = "nsbrkga" ]
+            then
+                command+="--num-elites-snapshots num_elites_snapshots/${instance}_${solver}_${seed}.txt "
+            fi
+            if [ $i -lt $num_processes ]
+            then
+                commands[$i]+="$command"
+            else
+                commands[$((i%num_processes))]+=" && $command"
+            fi
+            i=$((i+1))
+        done
+    done
+done
+
+for ((i=0;i<num_processes;i++))
+do
+    commands[$i]+=") &> log_${i}.txt"
+done
+
+final_command=""
+
+for ((i=0;i<num_processes;i++))
+do
+    command=${commands[$i]}
+    final_command+="$command & "
+done
+
+eval $final_command
+
+wait
+
+commands=()
+
+for ((i=0;i<num_processes;i++))
+do
+    commands[$i]="("
+done
+
+i=0
+
+for instance in ${instances[@]}
+do
+    command="./bin/exec/hypervolume_calculator_exec "
+    command+="--instance instances/${instance}.txt "
+    j=0;
+    for solver in ${solvers[@]}
+    do
+        for seed in ${seeds[@]}
+        do
+            command+="--pareto-${j} pareto/${instance}_${solver}_${seed}.txt "
+            command+="--best-solutions-snapshots-${j} best_solutions_snapshots/${instance}_${solver}_${seed}_ "
+            command+="--hypervolume-${j} hypervolume/${instance}_${solver}_${seed}.txt "
+            command+="--hypervolume-snapshots-${j} hypervolume_snapshots/${instance}_${solver}_${seed}.txt "
+            j=$((j+1))
+        done
+    done
+    if [ $i -lt $num_processes ]
+    then
+        commands[$i]+="$command"
+    else
+        commands[$((i%num_processes))]+=" && $command"
+    fi
+    i=$((i+1))
+done
+
+for ((i=0;i<num_processes;i++))
+do
+    commands[$i]+=") &>> log_${i}.txt"
+done
+
+final_command=""
+
+for ((i=0;i<num_processes;i++))
+do
+    command=${commands[$i]}
+    final_command+="$command & "
+done
+
+eval $final_command
+
+wait
+
+commands=()
+
+for ((i=0;i<num_processes;i++))
+do
+    commands[$i]="("
+done
+
+i=0
+
+for instance in ${instances[@]}
+do
+    for solver in ${solvers[@]}
+    do
+        command="./bin/exec/results_aggregator_exec "
+        command+="--hypervolumes hypervolume/${instance}_${solver}.txt "
+        command+="--hypervolume-statistics hypervolume/${instance}_${solver}_stats.txt "
+        command+="--statistics-best statistics/${instance}_${solver}_best.txt "
+        command+="--statistics-median statistics/${instance}_${solver}_median.txt "
+        command+="--pareto-best pareto/${instance}_${solver}_best.txt "
+        command+="--pareto-median pareto/${instance}_${solver}_median.txt "
+        command+="--hypervolume-snapshots-best hypervolume_snapshots/${instance}_${solver}_best.txt "
+        command+="--hypervolume-snapshots-median hypervolume_snapshots/${instance}_${solver}_median.txt "
+        command+="--best-solutions-snapshots-best best_solutions_snapshots/${instance}_${solver}_best_ "
+        command+="--best-solutions-snapshots-median best_solutions_snapshots/${instance}_${solver}_median_ "
+        command+="--num-non-dominated-snapshots-best num_non_dominated_snapshots/${instance}_${solver}_best.txt "
+        command+="--num-non-dominated-snapshots-median num_non_dominated_snapshots/${instance}_${solver}_median.txt "
+        command+="--populations-snapshots-best populations_snapshots/${instance}_${solver}_best_ "
+        command+="--populations-snapshots-median populations_snapshots/${instance}_${solver}_median_ "
+        command+="--num-fronts-snapshots-best num_fronts_snapshots/${instance}_${solver}_best.txt "
+        command+="--num-fronts-snapshots-median num_fronts_snapshots/${instance}_${solver}_median.txt "
+        if [ $solver = "nsbrkga" ]
+        then
+            command+="--num-elites-snapshots-best num_elites_snapshots/${instance}_${solver}_best.txt "
+            command+="--num-elites-snapshots-median num_elites_snapshots/${instance}_${solver}_median.txt "
+        fi
+        j=0;
+        for seed in ${seeds[@]}
+        do
+            command+="--statistics-${j} statistics/${instance}_${solver}_${seed}.txt "
+            command+="--pareto-${j} pareto/${instance}_${solver}_${seed}.txt "
+            command+="--hypervolume-${j} hypervolume/${instance}_${solver}_${seed}.txt "
+            command+="--hypervolume-snapshots-${j} hypervolume_snapshots/${instance}_${solver}_${seed}.txt "
+            command+="--best-solutions-snapshots-${j} best_solutions_snapshots/${instance}_${solver}_${seed}_ "
+            command+="--num-non-dominated-snapshots-${j} num_non_dominated_snapshots/${instance}_${solver}_${seed}.txt "
+            command+="--populations-snapshots-${j} populations_snapshots/${instance}_${solver}_${seed}_ "
+            command+="--num-fronts-snapshots-${j} num_fronts_snapshots/${instance}_${solver}_${seed}.txt "
+            if [ $solver = "nsbrkga" ]
+            then
+                command+="--num-elites-snapshots-${j} num_elites_snapshots/${instance}_${solver}_${seed}.txt "
+            fi
+            j=$((j+1))
+        done
+        if [ $i -lt $num_processes ]
+        then
+            commands[$i]+="$command"
+        else
+            commands[$((i%num_processes))]+=" && $command"
+        fi
+        i=$((i+1))
+    done
+done
+
+for ((i=0;i<num_processes;i++))
+do
+    commands[$i]+=") &>> log_${i}.txt"
+done
+
+final_command=""
+
+for ((i=0;i<num_processes;i++))
+do
+    command=${commands[$i]}
+    final_command+="$command & "
+done
+
+eval $final_command
+
+wait
