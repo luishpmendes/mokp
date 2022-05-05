@@ -16,7 +16,7 @@ void NSBRKGA_Solver::capture_snapshot(
                 time_snapshot,
                 std::vector<std::vector<double>>(
                     this->best_individuals.size())));
-    for(unsigned i = 0; i < this->best_individuals.size(); i++) {
+    for (unsigned i = 0; i < this->best_individuals.size(); i++) {
         std::get<2>(this->best_solutions_snapshots.back())[i] =
             this->best_individuals[i].first;
     }
@@ -25,7 +25,7 @@ void NSBRKGA_Solver::capture_snapshot(
     this->num_fronts.resize(this->num_populations);
     this->num_elites.resize(this->num_populations);
 
-    for(unsigned i = 0; i < this->num_populations; i++) {
+    for (unsigned i = 0; i < this->num_populations; i++) {
         this->num_non_dominated[i] =
             algorithm.getCurrentPopulation(i).num_non_dominated;
         this->num_fronts[i] = algorithm.getCurrentPopulation(i).num_fronts;
@@ -45,9 +45,9 @@ void NSBRKGA_Solver::capture_snapshot(
                 this->num_iterations,
                 time_snapshot,
                 std::vector<std::vector<std::vector<double>>>()));
-    for(unsigned i = 0; i < this->num_populations; i++) {
+    for (unsigned i = 0; i < this->num_populations; i++) {
         std::get<2>(this->populations_snapshots.back()).emplace_back();
-        for(unsigned j = 0; j < this->population_size; j++) {
+        for (unsigned j = 0; j < this->population_size; j++) {
             std::get<2>(this->populations_snapshots.back()).back().push_back(
                     algorithm.getCurrentPopulation(i).getFitness(j));
         }
@@ -68,7 +68,7 @@ void NSBRKGA_Solver::solve() {
     Decoder decoder(this->instance,
                     this->num_threads);
 
-    this->senses = std::vector<BRKGA::Sense>(this->instance.num_knapsacks,
+    this->senses = std::vector<BRKGA::Sense>(this->instance.num_dimensions,
                                              BRKGA::Sense::MAXIMIZE);
 
     BRKGA::BrkgaParams params;
@@ -102,8 +102,8 @@ void NSBRKGA_Solver::solve() {
     std::vector<std::vector<std::vector<double>>> initial_fitnesses(
             this->num_populations);
 
-    if(!this->initial_individuals.empty()) {
-        for(unsigned i = 0; i < this->initial_individuals.size(); i++) {
+    if (!this->initial_individuals.empty()) {
+        for (unsigned i = 0; i < this->initial_individuals.size(); i++) {
             initial_populations[i % this->num_populations].push_back(
                     this->initial_individuals[i].second);
         }
@@ -118,7 +118,7 @@ void NSBRKGA_Solver::solve() {
     std::shared_ptr<BRKGA::DistanceFunctionBase> dist_func(
             new BRKGA::KendallTauDistance());
 
-    if(this->max_num_snapshots > 0) {
+    if (this->max_num_snapshots > 0) {
         this->time_between_snapshots = this->time_limit /
             this->max_num_snapshots;
         this->iterations_between_snapshots = this->iterations_limit /
@@ -126,24 +126,24 @@ void NSBRKGA_Solver::solve() {
         this->capture_snapshot(algorithm);
     }
 
-    while(!this->are_termination_criteria_met()) {
+    while (!this->are_termination_criteria_met()) {
         this->num_iterations++;
 
-        if(algorithm.evolve()) {
+        if (algorithm.evolve()) {
             this->last_update_time = this->elapsed_time();
 
             auto update_offset = this->num_iterations -
                                  this->last_update_generation;
             this->last_update_generation = this->num_iterations;
 
-            if(this->large_offset < update_offset) {
+            if (this->large_offset < update_offset) {
                 this->large_offset = update_offset;
             }
 
             this->update_best_individuals(algorithm.getIncumbentSolutions());
         }
 
-        if(this->max_num_snapshots > 0 &&
+        if (this->max_num_snapshots > 0 &&
            this->num_snapshots < this->max_num_snapshots &&
           (this->elapsed_time() - this->time_last_snapshot >=
            this->time_between_snapshots ||
@@ -155,11 +155,11 @@ void NSBRKGA_Solver::solve() {
         unsigned generations_without_improvement = this->num_iterations -
             this->last_update_generation;
 
-        if(this->large_offset < generations_without_improvement) {
+        if (this->large_offset < generations_without_improvement) {
             this->large_offset = generations_without_improvement;
         }
 
-        if(this->pr_interval > 0 && generations_without_improvement > 0 &&
+        if (this->pr_interval > 0 && generations_without_improvement > 0 &&
                 (generations_without_improvement % this->pr_interval == 0)) {
             this->num_path_relink_calls++;
             const auto pr_start_time = std::chrono::steady_clock::now();
@@ -192,7 +192,7 @@ void NSBRKGA_Solver::solve() {
                                          this->last_update_generation;
                     this->last_update_generation = this->num_iterations;
 
-                    if(this->large_offset < update_offset) {
+                    if (this->large_offset < update_offset) {
                         this->large_offset = update_offset;
                     }
 
@@ -208,17 +208,17 @@ void NSBRKGA_Solver::solve() {
             }
         }
 
-        if(this->shake_interval > 0 && generations_without_improvement > 0 &&
+        if (this->shake_interval > 0 && generations_without_improvement > 0 &&
                 (generations_without_improvement % this->shake_interval == 0)) {
             this->num_shakings++;
             algorithm.shake(this->shake_intensity, BRKGA::ShakingType::SWAP);
         }
 
-        if(this->reset_interval > 0 && generations_without_improvement > 0 &&
+        if (this->reset_interval > 0 && generations_without_improvement > 0 &&
                 (generations_without_improvement % this->reset_interval) == 0) {
             this->num_resets++;
             algorithm.reset(this->reset_intensity);
-            if(!this->initial_individuals.empty()) {
+            if (!this->initial_individuals.empty()) {
                 shuffle(this->initial_individuals.begin(),
                         this->initial_individuals.end(),
                         this->rng);
@@ -227,15 +227,15 @@ void NSBRKGA_Solver::solve() {
                 initial_fitnesses.clear();
                 initial_fitnesses.resize(this->num_populations);
 
-                for(unsigned i = 0; i < this->initial_individuals.size(); i++) {
+                for (unsigned i = 0; i < this->initial_individuals.size(); i++) {
                     initial_populations[i % this->num_populations].push_back(
                             this->best_individuals[i].second);
                     initial_fitnesses[i % this->num_populations].push_back(
                             this->best_individuals[i].first);
                 }
 
-                for(unsigned i = 0; i < this->num_populations; i++) {
-                    for(unsigned j = 0;
+                for (unsigned i = 0; i < this->num_populations; i++) {
+                    for (unsigned j = 0;
                         j < initial_populations[i].size();
                         j++) {
                         algorithm.injectChromosome(initial_populations[i][j],
@@ -248,13 +248,13 @@ void NSBRKGA_Solver::solve() {
         }
     }
 
-    if(this->max_num_snapshots > 0) {
+    if (this->max_num_snapshots > 0) {
         this->capture_snapshot(algorithm);
     }
 
     this->best_solutions.clear();
 
-    for(const auto & best_individual : this->best_individuals) {
+    for (const auto & best_individual : this->best_individuals) {
         this->best_solutions.push_back(Solution(this->instance,
                                                 best_individual.second));
     }

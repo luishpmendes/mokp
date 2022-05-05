@@ -4,7 +4,7 @@ namespace mokp {
 
 Solver::Solver(const Instance & instance)
     : instance(instance),
-      senses(instance.num_knapsacks, BRKGA::Sense::MAXIMIZE) {
+      senses(instance.num_dimensions, BRKGA::Sense::MAXIMIZE) {
     this->set_seed(this->seed);
 }
 
@@ -51,7 +51,7 @@ bool Solver::update_best_individuals(
                           std::vector<double>>> & new_individuals) {
     bool result = false;
 
-    if(new_individuals.empty()) {
+    if (new_individuals.empty()) {
         return result;
     }
 
@@ -60,17 +60,17 @@ bool Solver::update_best_individuals(
                 new_individuals,
                 this->senses).front();
 
-    for(const auto & new_individual : non_dominated_new_individuals) {
+    for (const auto & new_individual : non_dominated_new_individuals) {
         bool is_dominated_or_equal = false;
 
-        for(auto it  = this->best_individuals.begin();
+        for (auto it  = this->best_individuals.begin();
                  it != this->best_individuals.end();) {
             auto individual = *it;
 
-            if(Solution::dominates(new_individual.first, individual.first)) {
+            if (Solution::dominates(new_individual.first, individual.first)) {
                 it = this->best_individuals.erase(it);
             } else {
-                if(Solution::dominates(individual.first,
+                if (Solution::dominates(individual.first,
                                        new_individual.first)
                         || std::equal(individual.first.begin(),
                                       individual.first.end(),
@@ -87,13 +87,13 @@ bool Solver::update_best_individuals(
             }
         }
 
-        if(!is_dominated_or_equal) {
+        if (!is_dominated_or_equal) {
             this->best_individuals.push_back(new_individual);
             result = true;
         }
     }
 
-    if(this->best_individuals.size() > this->max_num_solutions) {
+    if (this->best_individuals.size() > this->max_num_solutions) {
         BRKGA::Population::crowdingSort<std::vector<double>>(
                 this->best_individuals);
         this->best_individuals.resize(this->max_num_solutions);
@@ -107,7 +107,7 @@ bool Solver::update_best_individuals(const pagmo::population & pop) {
     std::vector<std::pair<std::vector<double>, std::vector<double>>>
         new_individuals(pop.size());
 
-    for(unsigned i = 0; i < pop.size(); i++) {
+    for (unsigned i = 0; i < pop.size(); i++) {
         new_individuals[i] = std::make_pair(pop.get_f()[i], pop.get_x()[i]);
         std::transform(new_individuals[i].first.begin(),
                        new_individuals[i].first.end(),
@@ -126,7 +126,7 @@ void Solver::capture_snapshot(const pagmo::population & pop) {
                 time_snapshot,
                 std::vector<std::vector<double>>(
                     this->best_individuals.size())));
-    for(unsigned i = 0; i < this->best_individuals.size(); i++) {
+    for (unsigned i = 0; i < this->best_individuals.size(); i++) {
         std::get<2>(this->best_solutions_snapshots.back())[i] =
             this->best_individuals[i].first;
     }
@@ -141,7 +141,7 @@ void Solver::capture_snapshot(const pagmo::population & pop) {
 
     this->current_individuals.resize(pop.size());
 
-    for(unsigned i = 0; i < pop.size(); i++) {
+    for (unsigned i = 0; i < pop.size(); i++) {
         this->current_individuals[i] = std::make_pair(f[i], pop.get_x()[i]);
     }
 
@@ -170,7 +170,7 @@ void Solver::capture_snapshot(const pagmo::population & pop) {
 }
 
 std::ostream & operator <<(std::ostream & os, const Solver & solver) {
-    os << "Number of knapsacks: " << solver.instance.num_knapsacks << std::endl
+    os << "Number of dimensions: " << solver.instance.num_dimensions << std::endl
        << "Number of items: " << solver.instance.num_items << std::endl
        << "Seed: " << solver.seed << std::endl
        << "Time limit: " << solver.time_limit << std::endl

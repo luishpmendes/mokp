@@ -23,7 +23,7 @@ std::pair<pagmo::vector_double, pagmo::vector_double> Problem::get_bounds()
 }
 
 pagmo::vector_double::size_type Problem::get_nobj() const {
-    return this->instance.num_knapsacks;
+    return this->instance.num_dimensions;
 }
 
 }

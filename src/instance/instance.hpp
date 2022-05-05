@@ -11,41 +11,53 @@ namespace mokp {
  ***********************************************/
 class Instance {
     public:
-    /**************************
-     * The number of knapsack.
-     **************************/
-    unsigned num_knapsacks;
+    /***************************
+     * The number of dimenions.
+     ***************************/
+    unsigned num_dimensions;
 
     /**************************
      * The number of items.
      **************************/
     unsigned num_items;
 
-    /*********************************
-     * The capacity of each knapsack.
-     *********************************/
+    /**********************************
+     * The capacity on each dimension.
+     **********************************/
     std::vector<double> capacity;
 
-    /********************************************
-     * The weight of each item on each knapsack.
-     ********************************************/
+    /*********************************************
+     * The weight of each item on each dimension.
+     *********************************************/
     std::vector<std::vector<double>> weight;
 
     /********************************************
-     * The value of each item on each knapsack.
+     * The value of each item on each dimension.
      ********************************************/
     std::vector<std::vector<double>> value;
 
-    /*****************************************************************
+    /*******************************************************
+     * The minimum weight over all items on each dimension.
+     *******************************************************/
+    std::vector<double> min_weight;
+
+    private:
+    /*****************************
+     * Initializes a new intance.
+     *****************************/
+    void init();
+
+    public:
+    /******************************************************************
      * Constructs a new instance.
      *
-     * @param num_knapsacks The number of knapsacks.
-     * @param num_items     The number of items.
-     * @param capacity      The capacity of each knapsack.
-     * @param weight        The weight of each item on each knapsack.
-     * @param value         The profit of each item on each knapsack.
-     *****************************************************************/
-    Instance(unsigned num_knapsacks,
+     * @param num_dimensions The number of dimensions.
+     * @param num_items      The number of items.
+     * @param capacity       The capacity of each knapsack.
+     * @param weight         The weight of each item on each knapsack.
+     * @param value          The profit of each item on each knapsack.
+     ******************************************************************/
+    Instance(unsigned num_dimensions,
              unsigned num_items,
              const std::vector<double> & capacity,
              const std::vector<std::vector<double>> & weight,

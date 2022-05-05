@@ -7,20 +7,20 @@ namespace mokp {
 
 bool Solution::dominates(const std::vector<double> & valueA,
                          const std::vector<double> & valueB) {
-    if(valueA.size() != valueB.size()) {
+    if (valueA.size() != valueB.size()) {
         return false;
     }
 
     // Checks if valueA is at least as good as valueB
-    for(unsigned i = 0; i < valueA.size(); i++) {
-        if(valueA[i] < valueB[i] - std::numeric_limits<double>::epsilon()) {
+    for (unsigned i = 0; i < valueA.size(); i++) {
+        if (valueA[i] < valueB[i] - std::numeric_limits<double>::epsilon()) {
             return false;
         }
     }
 
     // Checks if valueA is better than valueB
-    for(unsigned i = 0; i < valueA.size(); i++) {
-        if(valueA[i] > valueB[i] + std::numeric_limits<double>::epsilon()) {
+    for (unsigned i = 0; i < valueA.size(); i++) {
+        if (valueA[i] > valueB[i] + std::numeric_limits<double>::epsilon()) {
             return true;
         }
     }
@@ -40,12 +40,12 @@ void Solution::compute_knapsack(const std::vector<double> & key) {
 
 void Solution::init() {
     // Compute the value and weight
-    this->value = std::vector<double>(this->instance.num_knapsacks, 0.0);
-    this->weight = std::vector<double>(this->instance.num_knapsacks, 0.0);
+    this->value = std::vector<double>(this->instance.num_dimensions, 0.0);
+    this->weight = std::vector<double>(this->instance.num_dimensions, 0.0);
 
-    for(unsigned i = 0; i < this->instance.num_items; i++) {
-        if(this->knapsack[i]) {
-            for(unsigned j = 0; j < this->instance.num_knapsacks; j++) {
+    for (unsigned i = 0; i < this->instance.num_items; i++) {
+        if (this->knapsack[i]) {
+            for (unsigned j = 0; j < this->instance.num_dimensions; j++) {
                 this->value[j] += this->instance.value[i][j];
                 this->weight[j] += this->instance.weight[i][j];
             }
@@ -77,13 +77,16 @@ Solution::Solution(const Instance & instance) : instance(instance) {
 void Solution::repair() {
     std::vector<std::pair<double, unsigned>> q(this->instance.num_items);
 
-    for(unsigned i = 0; i < this->instance.num_items; i++) {
+    for (unsigned i = 0; i < this->instance.num_items; i++) {
         q[i].second = i;
-        q[i].first = this->instance.value[i].front()/this->instance.weight[i].front();
+        q[i].first = this->instance.value[i].front()
+                        / this->instance.weight[i].front();
 
-        for(unsigned j = 1; j < this->instance.num_knapsacks; j++) {
-            if(q[i].first < this->instance.value[i][j]/this->instance.weight[i][j]) {
-                q[i].first = this->instance.value[i][j]/this->instance.weight[i][j];;
+        for (unsigned j = 1; j < this->instance.num_dimensions; j++) {
+            if (q[i].first < this->instance.value[i][j] 
+                            / this->instance.weight[i][j]) {
+                q[i].first = this->instance.value[i][j]
+                            / this->instance.weight[i][j];;
             }
         }
     }
@@ -91,12 +94,12 @@ void Solution::repair() {
     std::sort(q.begin(), q.end());
 
     unsigned i = 0;
-    for(unsigned j = 0; j < this->instance.num_knapsacks; j++) {
-        while(this->weight[j] > this->instance.capacity[j]) {
-            if(this->knapsack[q[i].second]) {
+    for (unsigned j = 0; j < this->instance.num_dimensions; j++) {
+        while (this->weight[j] > this->instance.capacity[j]) {
+            if (this->knapsack[q[i].second]) {
                 this->knapsack[q[i].second] = false;
 
-                for (unsigned k = 0; k < this->instance.num_knapsacks; k++) {
+                for (unsigned k = 0; k < this->instance.num_dimensions; k++) {
                     this->value[k] -= this->instance.value[q[i].second][k];
                     this->weight[k] -= this->instance.weight[q[i].second][k];
                 }
@@ -108,7 +111,7 @@ void Solution::repair() {
 }
 
 bool Solution::is_feasible() const {
-    if(!this->instance.is_valid()) {
+    if (!this->instance.is_valid()) {
         return false;
     }
 
@@ -116,15 +119,15 @@ bool Solution::is_feasible() const {
         return false;
     }
 
-    if (this->value.size() != this->instance.num_knapsacks) {
+    if (this->value.size() != this->instance.num_dimensions) {
         return false;
     }
 
-    if (this->weight.size() != this->instance.num_knapsacks) {
+    if (this->weight.size() != this->instance.num_dimensions) {
         return false;
     }
 
-    for(unsigned j = 0; j < this->instance.num_knapsacks; j++) {
+    for (unsigned j = 0; j < this->instance.num_dimensions; j++) {
         if (this->weight[j] < 0.0) {
             return false;
         }
@@ -140,18 +143,20 @@ bool Solution::is_feasible() const {
         double sum_weight = 0,
                sum_value = 0;
 
-        for(unsigned i = 0; i < this->instance.num_items; i++) {
+        for (unsigned i = 0; i < this->instance.num_items; i++) {
             if (this->knapsack[i]) {
                 sum_weight += this->instance.weight[i][j];
                 sum_value += this->instance.value[i][j];
             }
         }
 
-        if(sum_weight > this->weight[j] + std::numeric_limits<double>::epsilon()) {
+        if (sum_weight
+                > this->weight[j] + std::numeric_limits<double>::epsilon()) {
             return false;
         }
 
-        if(fabs(sum_value - this->value[j]) > std::numeric_limits<double>::epsilon()) {
+        if (fabs(sum_value - this->value[j])
+                > std::numeric_limits<double>::epsilon()) {
             return false;
         }
     }
@@ -166,7 +171,7 @@ bool Solution::dominates(const Solution & solution) const {
 std::istream & operator >>(std::istream & is, Solution & solution) {
     unsigned aux = 0;
 
-    for(unsigned i = 0; i < solution.instance.num_items; i++) {
+    for (unsigned i = 0; i < solution.instance.num_items; i++) {
         is >> aux;
 
         if (aux) {
@@ -178,7 +183,7 @@ std::istream & operator >>(std::istream & is, Solution & solution) {
 }
 
 std::ostream & operator <<(std::ostream & os, Solution & solution) {
-    for(unsigned i = 0; i < solution.instance.num_items - 1; i++) {
+    for (unsigned i = 0; i < solution.instance.num_items - 1; i++) {
         os << solution.knapsack[i] << ' ';
     }
 
