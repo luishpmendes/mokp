@@ -15,7 +15,7 @@ class Decoder {
 
     std::vector<std::vector<double>> weights;
 
-    std::vector<std::vector<std::pair<double, unsigned>>> qs;
+    std::vector<std::vector<std::pair<double, unsigned>>> permutations;
 
     Decoder(const Instance & instance,
             unsigned num_threads);

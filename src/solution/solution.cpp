@@ -28,21 +28,13 @@ bool Solution::dominates(const std::vector<double> & valueA,
     return false;
 }
 
-void Solution::compute_knapsack(const std::vector<double> & key) {
-    this->knapsack = std::vector<bool>(this->instance.num_items, false);
-
-    for (unsigned i = 0; i < this->instance.num_items; i++) {
-        if (key[i] >= 0.5) {
-            this->knapsack[i] = true;
-        }
-    }
-}
-
-void Solution::init() {
+Solution::Solution(const Instance & instance,
+                   const std::vector<bool> & knapsack) :
+        instance(instance),
+        knapsack(knapsack),
+        value(instance.num_dimensions, 0.0),
+        weight(instance.num_dimensions, 0.0) {
     // Compute the value and weight
-    this->value = std::vector<double>(this->instance.num_dimensions, 0.0);
-    this->weight = std::vector<double>(this->instance.num_dimensions, 0.0);
-
     for (unsigned i = 0; i < this->instance.num_items; i++) {
         if (this->knapsack[i]) {
             for (unsigned j = 0; j < this->instance.num_dimensions; j++) {
@@ -54,61 +46,53 @@ void Solution::init() {
 }
 
 Solution::Solution(const Instance & instance,
-                   const std::vector<bool> & knapsack) :
-        instance(instance),
-        knapsack(knapsack) {
-    this->init();
-    this->repair();
-}
-
-Solution::Solution(const Instance & instance,
                    const std::vector<double> & key) :
-        instance(instance) {
-    this->compute_knapsack(key);
-    this->init();
-    this->repair();
-}
-
-Solution::Solution(const Instance & instance) : instance(instance) {
-    this->knapsack = std::vector<bool>(this->instance.num_items, false);
-    this->init();
-}
-
-void Solution::repair() {
-    std::vector<std::pair<double, unsigned>> q(this->instance.num_items);
+        instance(instance),
+        knapsack(instance.num_items, false),
+        value(instance.num_dimensions, 0.0),
+        weight(instance.num_dimensions, 0.0) {
+    std::vector<std::pair<double, unsigned>> permutation(this->instance.num_items);
 
     for (unsigned i = 0; i < this->instance.num_items; i++) {
-        q[i].second = i;
-        q[i].first = this->instance.value[i].front()
-                        / this->instance.weight[i].front();
-
-        for (unsigned j = 1; j < this->instance.num_dimensions; j++) {
-            if (q[i].first < this->instance.value[i][j] 
-                            / this->instance.weight[i][j]) {
-                q[i].first = this->instance.value[i][j]
-                            / this->instance.weight[i][j];;
-            }
-        }
+        permutation[i] = std::make_pair(key[i], i);
     }
 
-    std::sort(q.begin(), q.end());
+    std::sort(permutation.begin(), permutation.end());
 
-    unsigned i = 0;
-    for (unsigned j = 0; j < this->instance.num_dimensions; j++) {
-        while (this->weight[j] > this->instance.capacity[j]) {
-            if (this->knapsack[q[i].second]) {
-                this->knapsack[q[i].second] = false;
+    bool has_space = true;
+    for (unsigned i = 0; i < this->instance.num_items && has_space; i++) {
+        bool item_fits = true;
 
-                for (unsigned k = 0; k < this->instance.num_dimensions; k++) {
-                    this->value[k] -= this->instance.value[q[i].second][k];
-                    this->weight[k] -= this->instance.weight[q[i].second][k];
-                }
+        for (unsigned j = 0;
+             j < this->instance.num_dimensions && item_fits;
+             j++) {
+            if (this->weight[j] + this->instance.min_weight[j]
+                    > this->instance.capacity[j]) {
+                has_space = false;
+                item_fits = false;
             }
 
-            i++;
+            if (this->weight[j] + this->instance.weight[permutation[i].second][j]
+                    > this->instance.capacity[j]) {
+                item_fits = false;
+            }
+        }
+
+        if (item_fits) {
+            this->knapsack[permutation[i].second] = true;
+            for (unsigned j = 0; j < this->instance.num_dimensions; j++) {
+                this->value[j] += this->instance.value[permutation[i].second][j];
+                this->weight[j] += this->instance.weight[permutation[i].second][j];
+            }
         }
     }
 }
+
+Solution::Solution(const Instance & instance) :
+        instance(instance),
+        knapsack(instance.num_items, false),
+        value(instance.num_dimensions, 0.0),
+        weight(instance.num_dimensions, 0.0) {}
 
 bool Solution::is_feasible() const {
     if (!this->instance.is_valid()) {

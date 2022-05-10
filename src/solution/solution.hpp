@@ -35,25 +35,11 @@ class Solution {
      **************************/
     std::vector<double> value;
 
-    /*******************************
-     * The weight of each knapsack.
-     *******************************/
+    /********************************
+     * The weight on each dimension.
+     ********************************/
     std::vector<double> weight;
 
-    private:
-    /**************************************************************
-     * Computes the knapsack assignment of each item from the key.
-     *
-     * @param key the key.
-     **************************************************************/
-    void compute_knapsack(const std::vector<double> & key);
-
-    /******************************
-     * Initializes a new solution.
-     ******************************/
-    void init();
-
-    public:
     /********************************************************
      * Constructs a new solution.
      *
@@ -79,11 +65,6 @@ class Solution {
      * @param instance the instance been solved.
      ********************************************/
     Solution(const Instance & instance);
-
-    /*************************
-     * Repairs this solution.
-     *************************/
-    void repair();
 
     /*********************************************
      * Verifies whether this solution is
