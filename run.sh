@@ -5,7 +5,7 @@ solvers=(nsga2 nspso moead mhaco ihs nsbrkga)
 seeds=(776505114 187342467 815887906 815887906 728692796)
 versions=(best median)
 
-num_processes=10
+num_processes=6
 
 time_limit=3600
 population_size=1000
