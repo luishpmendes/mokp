@@ -35,9 +35,15 @@ std::vector<double> Decoder::decode(BRKGA::Chromosome & chromosome,
         permutation[i] = std::make_pair(chromosome[i], i);
     }
 
+    for (unsigned j = 0; j < this->instance.num_dimensions; j++) {
+        value[j] = 0;
+        weight[j] = 0;
+    }
+
     std::sort(permutation.begin(), permutation.end());
 
     bool has_space = true;
+
     for (unsigned i = 0; i < this->instance.num_items && has_space; i++) {
         bool item_fits = true;
 
@@ -58,6 +64,7 @@ std::vector<double> Decoder::decode(BRKGA::Chromosome & chromosome,
 
         if (item_fits) {
             knapsack[permutation[i].second] = true;
+
             for (unsigned j = 0; j < this->instance.num_dimensions; j++) {
                 value[j] += this->instance.value[permutation[i].second][j];
                 weight[j] += this->instance.weight[permutation[i].second][j];

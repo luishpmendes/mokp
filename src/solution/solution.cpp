@@ -60,6 +60,7 @@ Solution::Solution(const Instance & instance,
     std::sort(permutation.begin(), permutation.end());
 
     bool has_space = true;
+
     for (unsigned i = 0; i < this->instance.num_items && has_space; i++) {
         bool item_fits = true;
 
@@ -80,6 +81,7 @@ Solution::Solution(const Instance & instance,
 
         if (item_fits) {
             this->knapsack[permutation[i].second] = true;
+
             for (unsigned j = 0; j < this->instance.num_dimensions; j++) {
                 this->value[j] += this->instance.value[permutation[i].second][j];
                 this->weight[j] += this->instance.weight[permutation[i].second][j];
