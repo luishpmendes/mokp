@@ -172,6 +172,7 @@ void Solver::capture_snapshot(const pagmo::population & pop) {
 std::ostream & operator <<(std::ostream & os, const Solver & solver) {
     os << "Number of dimensions: " << solver.instance.num_dimensions << std::endl
        << "Number of items: " << solver.instance.num_items << std::endl
+       << "Decoder type: " << solver.decoder_type << std::endl
        << "Seed: " << solver.seed << std::endl
        << "Time limit: " << solver.time_limit << std::endl
        << "Iterations limit: " << solver.iterations_limit << std::endl

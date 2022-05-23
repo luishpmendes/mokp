@@ -23,6 +23,11 @@ class Solver {
      *********************************/
     std::vector<BRKGA::Sense> senses;
 
+    /**************************
+     * The decoder type
+     **************************/
+    unsigned decoder_type = 0;
+
     /****************************************************************
      * The seed for the pseudo-random numbers generator.
      ****************************************************************/

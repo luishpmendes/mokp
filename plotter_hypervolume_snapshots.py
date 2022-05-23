@@ -19,16 +19,17 @@ for version in versions:
         ax.set_xlabel("Time (s)", fontsize = "large")
         ax.set_ylim(bottom = 0, top = 1)
         for j in range(len(solvers)):
-            filename = "hypervolume_snapshots/" + instances[i] + "_" + solvers[j] + "_" + version + ".txt"
-            if os.path.exists(filename):
-                x = []
-                y = []
-                with open(filename) as csv_file:
-                    data = csv.reader(csv_file, delimiter = ",")
-                    for row in data:
-                        x.append(float(row[1]))
-                        y.append(float(row[2]))
-                ax.plot(x, y, label = solver_labels[solvers[j]], marker = (j + 3, 2, 0), color = colors[j])
+            for k in range(len(decoder_types)):
+                filename = "hypervolume_snapshots/" + instances[i] + "_" + solvers[j] + "_" + decoder_types[k] + "_" + version + ".txt"
+                if os.path.exists(filename):
+                    x = []
+                    y = []
+                    with open(filename) as csv_file:
+                        data = csv.reader(csv_file, delimiter = ",")
+                        for row in data:
+                            x.append(float(row[1]))
+                            y.append(float(row[2]))
+                    ax.plot(x, y, label = solver_labels[solvers[j]] + " " + decoder_types_labels[decoder_types[k]], marker = (j * len(decoder_types) + k + 3, 2, 0), color = colors[j * len(decoder_types) + k])
         ax.set_xlim(left = 0)
         ax.legend(loc = 'best')
     fig.suptitle("Hypervolume", fontsize = "xx-large")
@@ -39,25 +40,27 @@ hypervolume_per_solver = {}
 time_per_solver = {}
 
 for solver in solvers:
-    hypervolume_per_solver[solver] = []
-    time_per_solver[solver] = []
-    for i in range(num_snapshots + 1):
-        hypervolume_per_solver[solver].append([])
-        time_per_solver[solver].append([])
+    for decoder_type in decoder_types:
+        hypervolume_per_solver[solver + " " + str(decoder_type)] = []
+        time_per_solver[solver + " " + str(decoder_type)] = []
+        for i in range(num_snapshots + 1):
+            hypervolume_per_solver[solver + " " + str(decoder_type)].append([])
+            time_per_solver[solver + " " + str(decoder_type)].append([])
 
 for instance in instances:
     for solver in solvers:
-        for seed in seeds:
-            filename = "hypervolume_snapshots/" + instance + "_" + solver + "_" + str(seed) + ".txt"
-            if os.path.exists(filename):
-                with open(filename) as csv_file:
-                    data = csv.reader(csv_file, delimiter = ",")
-                    i = 0
-                    for row in data:
-                        time_per_solver[solver][i].append(float(row[1]))
-                        hypervolume_per_solver[solver][i].append(float(row[2]))
-                        i += 1
-                    csv_file.close()
+        for decoder_type in decoder_types:
+            for seed in seeds:
+                filename = "hypervolume_snapshots/" + instance + "_" + solver + "_" + str(decoder_type) + "_" + str(seed) + ".txt"
+                if os.path.exists(filename):
+                    with open(filename) as csv_file:
+                        data = csv.reader(csv_file, delimiter = ",")
+                        i = 0
+                        for row in data:
+                            time_per_solver[solver + " " + str(decoder_type)][i].append(float(row[1]))
+                            hypervolume_per_solver[solver + " " + str(decoder_type)][i].append(float(row[2]))
+                            i += 1
+                        csv_file.close()
 
 plt.figure()
 plt.title("Hypervolume x Time")
@@ -67,12 +70,12 @@ max_time = 0;
 for i in range(len(solvers)):
     x = []
     y = []
-    for j in range(num_snapshots + 1):
-        x.append(stats.mean(time_per_solver[solvers[i]][j]))
-        y.append(stats.mean(hypervolume_per_solver[solvers[i]][j]))
-        if max_time < max(time_per_solver[solvers[i]][j]):
-            max_time = max(time_per_solver[solvers[i]][j])
-    plt.plot(x, y, label = solver_labels[solvers[i]], marker = (i + 3, 2, 0), color = colors[i])
+    for k in range(num_snapshots + 1):
+        x.append(stats.mean(time_per_solver[solvers[i] + " " + str(decoder_types[j])][k]))
+        y.append(stats.mean(hypervolume_per_solver[solvers[i] + " " + str(decoder_types[j])][k]))
+        if max_time < max(time_per_solver[solvers[i] + " " + str(decoder_types[j])][k]):
+            max_time = max(time_per_solver[solvers[i] + " " + str(decoder_types[j])][k])
+    plt.plot(x, y, label = solver_labels[solvers[i] + " " + str(decoder_types[j])], marker = (i * len(decoder_types) + j + 3, 2, 0), color = colors[i])
 plt.xlim(left = 0, right = max_time)
 plt.ylim(bottom = 0.0, top = 1.0)
 plt.legend(loc = 'best')

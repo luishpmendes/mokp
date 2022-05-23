@@ -46,45 +46,116 @@ Solution::Solution(const Instance & instance,
 }
 
 Solution::Solution(const Instance & instance,
-                   const std::vector<double> & key) :
+                   const std::vector<double> & key,
+                   unsigned decoder_type) :
         instance(instance),
         knapsack(instance.num_items, false),
         value(instance.num_dimensions, 0.0),
         weight(instance.num_dimensions, 0.0) {
-    std::vector<std::pair<double, unsigned>> permutation(this->instance.num_items);
+    if (decoder_type == 0) {
+        bool has_space = true;
 
-    for (unsigned i = 0; i < this->instance.num_items; i++) {
-        permutation[i] = std::make_pair(key[i], i);
-    }
+        for (unsigned i = 0; i < this->instance.num_items && has_space; i++) {
+            if (key[this->instance.greedy_permutation[i]] >= 0.5) {
+                bool item_fits = true;
 
-    std::sort(permutation.begin(), permutation.end());
+                for (unsigned j = 0;
+                    j < this->instance.num_dimensions && item_fits;
+                    j++) {
+                    if (this->weight[j] + this->instance.min_weight[j]
+                            > this->instance.capacity[j]) {
+                        has_space = false;
+                        item_fits = false;
+                    }
 
-    bool has_space = true;
+                    if (this->weight[j] + 
+                            this->instance.weight[this->instance.greedy_permutation[i]][j]
+                            > this->instance.capacity[j]) {
+                        item_fits = false;
+                    }
+                }
 
-    for (unsigned i = 0; i < this->instance.num_items && has_space; i++) {
-        bool item_fits = true;
+                if (item_fits) {
+                    this->knapsack[this->instance.greedy_permutation[i]] = true;
 
-        for (unsigned j = 0;
-             j < this->instance.num_dimensions && item_fits;
-             j++) {
-            if (this->weight[j] + this->instance.min_weight[j]
-                    > this->instance.capacity[j]) {
-                has_space = false;
-                item_fits = false;
-            }
-
-            if (this->weight[j] + this->instance.weight[permutation[i].second][j]
-                    > this->instance.capacity[j]) {
-                item_fits = false;
+                    for (unsigned j = 0; j < this->instance.num_dimensions; j++) {
+                        this->value[j] +=
+                            this->instance.value[this->instance.greedy_permutation[i]][j];
+                        this->weight[j] +=
+                            this->instance.weight[this->instance.greedy_permutation[i]][j];
+                    }
+                }
             }
         }
 
-        if (item_fits) {
-            this->knapsack[permutation[i].second] = true;
+        for (unsigned i = 0; i < this->instance.num_items && has_space; i++) {
+            if (!this->knapsack[this->instance.greedy_permutation[i]]) {
+                bool item_fits = true;
 
-            for (unsigned j = 0; j < this->instance.num_dimensions; j++) {
-                this->value[j] += this->instance.value[permutation[i].second][j];
-                this->weight[j] += this->instance.weight[permutation[i].second][j];
+                for (unsigned j = 0;
+                    j < this->instance.num_dimensions && item_fits;
+                    j++) {
+                    if (this->weight[j] + this->instance.min_weight[j]
+                            > this->instance.capacity[j]) {
+                        has_space = false;
+                        item_fits = false;
+                    }
+
+                    if (this->weight[j] + 
+                            this->instance.weight[this->instance.greedy_permutation[i]][j]
+                            > this->instance.capacity[j]) {
+                        item_fits = false;
+                    }
+                }
+
+                if (item_fits) {
+                    this->knapsack[this->instance.greedy_permutation[i]] = true;
+
+                    for (unsigned j = 0; j < this->instance.num_dimensions; j++) {
+                        this->value[j] +=
+                            this->instance.value[this->instance.greedy_permutation[i]][j];
+                        this->weight[j] +=
+                            this->instance.weight[this->instance.greedy_permutation[i]][j];
+                    }
+                }
+            }
+        }
+    } else { // decoder_type == 1
+        std::vector<std::pair<double, unsigned>> permutation(this->instance.num_items);
+
+        for (unsigned i = 0; i < this->instance.num_items; i++) {
+            permutation[i] = std::make_pair(key[i], i);
+        }
+
+        std::sort(permutation.begin(), permutation.end());
+
+        bool has_space = true;
+
+        for (unsigned i = 0; i < this->instance.num_items && has_space; i++) {
+            bool item_fits = true;
+
+            for (unsigned j = 0;
+                j < this->instance.num_dimensions && item_fits;
+                j++) {
+                if (this->weight[j] + this->instance.min_weight[j]
+                        > this->instance.capacity[j]) {
+                    has_space = false;
+                    item_fits = false;
+                }
+
+                if (this->weight[j] + this->instance.weight[permutation[i].second][j]
+                        > this->instance.capacity[j]) {
+                    item_fits = false;
+                }
+            }
+
+            if (item_fits) {
+                this->knapsack[permutation[i].second] = true;
+
+                for (unsigned j = 0; j < this->instance.num_dimensions; j++) {
+                    this->value[j] += this->instance.value[permutation[i].second][j];
+                    this->weight[j] += this->instance.weight[permutation[i].second][j];
+                }
             }
         }
     }

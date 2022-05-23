@@ -41,6 +41,11 @@ class Instance {
      *******************************************************/
     std::vector<double> min_weight;
 
+    /*********************************************************************
+     * The permutation in increasing order of maximum value/weight ratio.
+     *********************************************************************/
+    std::vector<unsigned> greedy_permutation;
+
     private:
     /*****************************
      * Initializes a new intance.

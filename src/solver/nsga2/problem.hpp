@@ -9,7 +9,9 @@ class Problem {
     public:
     Instance instance;
 
-    Problem(const Instance & instance);
+    unsigned decoder_type;
+
+    Problem(const Instance & instance, unsigned decoder_type);
 
     Problem();
 

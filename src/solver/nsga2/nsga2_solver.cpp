@@ -12,7 +12,7 @@ NSGA2_Solver::NSGA2_Solver() = default;
 void NSGA2_Solver::solve() {
     this->start_time = std::chrono::steady_clock::now();
 
-    pagmo::problem prob{Problem(this->instance)};
+    pagmo::problem prob{Problem(this->instance, this->decoder_type)};
 
     pagmo::algorithm algo{pagmo::nsga2(1,
                                        this->crossover_probability,
@@ -66,7 +66,8 @@ void NSGA2_Solver::solve() {
 
     for(const auto & best_individual : this->best_individuals) {
         this->best_solutions.push_back(Solution(this->instance,
-                                                best_individual.second));
+                                                best_individual.second,
+                                                this->decoder_type));
     }
 
     this->solving_time = this->elapsed_time();

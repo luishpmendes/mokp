@@ -66,6 +66,7 @@ void NSBRKGA_Solver::solve() {
     this->start_time = std::chrono::steady_clock::now();
 
     Decoder decoder(this->instance,
+                    this->decoder_type,
                     this->num_threads);
 
     this->senses = std::vector<BRKGA::Sense>(this->instance.num_dimensions,
@@ -256,7 +257,8 @@ void NSBRKGA_Solver::solve() {
 
     for (const auto & best_individual : this->best_individuals) {
         this->best_solutions.push_back(Solution(this->instance,
-                                                best_individual.second));
+                                                best_individual.second,
+                                                this->decoder_type));
     }
 
     this->solving_time = this->elapsed_time();

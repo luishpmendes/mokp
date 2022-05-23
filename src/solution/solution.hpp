@@ -49,15 +49,17 @@ class Solution {
     Solution(const Instance & instance,
              const std::vector<bool> & knapsack);
 
-    /****************************************************
+    /********************************************************
      * Constructs a new solution.
      *
-     * @param instance the instance been solved.
-     * @param key      the key representing the
-     *                 knapsack assignment of each item.
-     ****************************************************/
+     * @param instance     the instance been solved.
+     * @param key          the key representing the
+     *                     knapsack assignment of each item.
+     * @param decoder_type the decoder type.
+     ********************************************************/
     Solution(const Instance & instance,
-             const std::vector<double> & key);
+             const std::vector<double> & key,
+             unsigned decoder_type);
 
     /********************************************
      * Constructs a new solution.

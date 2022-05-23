@@ -1,4 +1,5 @@
 #include "instance/instance.hpp"
+#include <algorithm>
 
 namespace mokp {
 
@@ -14,6 +15,26 @@ void Instance::init() {
                 this->min_weight[j] = this->weight[i][j];
             }
         }
+    }
+
+    // Compute the greedy permutation
+    std::vector<std::pair<double, unsigned>> permutation (this->num_items);
+    this->greedy_permutation = std::vector<unsigned>(this->num_items);
+
+    for (unsigned i = 0; i < this->num_items; i++) {
+        permutation[i] = std::make_pair(this->value[i][0] / this->weight[i][0], i);
+
+        for (unsigned j = 1; j < this->num_dimensions; j++) {
+            if (permutation[i].first < this->value[i][j] / this->weight[i][j]) {
+                permutation[i].first = this->value[i][j] / this->weight[i][j];
+            }
+        }
+    }
+
+    std::sort(permutation.begin(), permutation.end());
+
+    for (unsigned i = 0; i < this->num_items; i++) {
+        this->greedy_permutation[i] = permutation[i].second;
     }
 }
 
@@ -41,6 +62,7 @@ Instance Instance::operator = (const Instance & instance) {
     this->weight = instance.weight;
     this->value = instance.value;
     this->min_weight = instance.min_weight;
+    this->greedy_permutation = instance.greedy_permutation;
     return *this;
 }
 
@@ -67,6 +89,10 @@ bool Instance::is_valid() const {
         }
 
         if (this->value[i].size() != this->num_dimensions) {
+            return false;
+        }
+
+        if (this->greedy_permutation[i] > this->num_items) {
             return false;
         }
     }

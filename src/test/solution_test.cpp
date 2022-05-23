@@ -38,7 +38,7 @@ int main() {
 
         key = std::vector<double>(instance.num_items, 1.0);
 
-        mokp::Solution full_solution(instance, key);
+        mokp::Solution full_solution(instance, key, 0);
 
         if (instance.num_items == 100 && instance.num_dimensions == 2) {
             assert(full_solution.value[0]
@@ -77,32 +77,60 @@ int main() {
             k = distribution(rng);
         }
 
-        mokp::Solution solution(instance, key);
+        mokp::Solution solution0(instance, key, 0);
 
-        assert(solution.is_feasible());
+        assert(solution0.is_feasible());
 
         if (instance.num_items == 100 && instance.num_dimensions == 2) {
-            assert(solution.value[0] >= 0.0);
-            assert(solution.value[0] <= 4266.0);
-            assert(solution.value[1] >= 0.0);
-            assert(solution.value[1] <= 4037.0);
+            assert(solution0.value[0] >= 0.0);
+            assert(solution0.value[0] <= 4266.0);
+            assert(solution0.value[1] >= 0.0);
+            assert(solution0.value[1] <= 4037.0);
         } else if (instance.num_items == 100 && instance.num_dimensions == 3) {
-            assert(solution.value[0] >= 0.0);
-            assert(solution.value[0] <= 4081.0);
-            assert(solution.value[1] >= 0.0);
-            assert(solution.value[1] <= 4149.0);
-            assert(solution.value[2] >= 0.0);
-            assert(solution.value[2] <= 3948.0);
+            assert(solution0.value[0] >= 0.0);
+            assert(solution0.value[0] <= 4081.0);
+            assert(solution0.value[1] >= 0.0);
+            assert(solution0.value[1] <= 4149.0);
+            assert(solution0.value[2] >= 0.0);
+            assert(solution0.value[2] <= 3948.0);
         } else if (instance.num_items == 250 && instance.num_dimensions == 2) {
-            assert(solution.value[0] >= 0.0);
-            assert(solution.value[0] <= 9893.0);
-            assert(solution.value[1] >= 0.0);
-            assert(solution.value[1] <= 10103.0);
+            assert(solution0.value[0] >= 0.0);
+            assert(solution0.value[0] <= 9893.0);
+            assert(solution0.value[1] >= 0.0);
+            assert(solution0.value[1] <= 10103.0);
         } else if (instance.num_items == 500 && instance.num_dimensions == 2) {
-            assert(solution.value[0] >= 0.0);
-            assert(solution.value[0] <= 20094.0);
-            assert(solution.value[1] >= 0.0);
-            assert(solution.value[1] <= 20490.0);
+            assert(solution0.value[0] >= 0.0);
+            assert(solution0.value[0] <= 20094.0);
+            assert(solution0.value[1] >= 0.0);
+            assert(solution0.value[1] <= 20490.0);
+        }
+
+        mokp::Solution solution1(instance, key, 1);
+
+        assert(solution1.is_feasible());
+
+        if (instance.num_items == 100 && instance.num_dimensions == 2) {
+            assert(solution1.value[0] >= 0.0);
+            assert(solution1.value[0] <= 4266.0);
+            assert(solution1.value[1] >= 0.0);
+            assert(solution1.value[1] <= 4037.0);
+        } else if (instance.num_items == 100 && instance.num_dimensions == 3) {
+            assert(solution1.value[0] >= 0.0);
+            assert(solution1.value[0] <= 4081.0);
+            assert(solution1.value[1] >= 0.0);
+            assert(solution1.value[1] <= 4149.0);
+            assert(solution1.value[2] >= 0.0);
+            assert(solution1.value[2] <= 3948.0);
+        } else if (instance.num_items == 250 && instance.num_dimensions == 2) {
+            assert(solution1.value[0] >= 0.0);
+            assert(solution1.value[0] <= 9893.0);
+            assert(solution1.value[1] >= 0.0);
+            assert(solution1.value[1] <= 10103.0);
+        } else if (instance.num_items == 500 && instance.num_dimensions == 2) {
+            assert(solution1.value[0] >= 0.0);
+            assert(solution1.value[0] <= 20094.0);
+            assert(solution1.value[1] >= 0.0);
+            assert(solution1.value[1] <= 20490.0);
         }
     }
 

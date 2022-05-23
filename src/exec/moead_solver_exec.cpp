@@ -25,6 +25,10 @@ int main (int argc, char * argv[]) {
 
         mokp::MOEAD_Solver solver(instance);
 
+        if(arg_parser.option_exists("--decoder_type")) {
+            solver.decoder_type = std::stoul(arg_parser.option_value("--decoder_type"));
+        }
+
         if(arg_parser.option_exists("--seed")) {
             solver.set_seed(std::stoul(arg_parser.option_value("--seed")));
         }
@@ -344,6 +348,7 @@ int main (int argc, char * argv[]) {
     } else {
         std::cerr << "./moead_solver_exec "
                   << "--instance <instance_filename> "
+                  << "--decoder-type <decoder_type> "
                   << "--seed <seed> "
                   << "--time-limit <time_limit> "
                   << "--iterations-limit <iterations_limit> "

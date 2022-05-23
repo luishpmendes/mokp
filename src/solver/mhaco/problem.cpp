@@ -3,12 +3,13 @@
 
 namespace mokp {
 
-Problem::Problem(const Instance & instance) : instance(instance) {}
+Problem::Problem(const Instance & instance, unsigned decoder_type) :
+    instance(instance), decoder_type(decoder_type) {}
 
 Problem::Problem() {}
 
 pagmo::vector_double Problem::fitness(const pagmo::vector_double & dv) const {
-    Solution solution(this->instance, dv);
+    Solution solution(this->instance, dv, this->decoder_type);
     for (double & x : solution.value) {
         x = - x;
     }

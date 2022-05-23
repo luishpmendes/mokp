@@ -4,8 +4,10 @@
 namespace mokp {
 
 Decoder::Decoder(const Instance & instance,
+                 unsigned decoder_type,
                  unsigned num_threads)
     : instance(instance),
+      decoder_type(decoder_type),
       knapsacks(num_threads,
              std::vector<bool>(instance.num_items, false)),
       values(num_threads,
@@ -32,42 +34,112 @@ std::vector<double> Decoder::decode(BRKGA::Chromosome & chromosome,
 #   endif
 
     for (unsigned i = 0; i < this->instance.num_items; i++) {
-        permutation[i] = std::make_pair(chromosome[i], i);
+        knapsack[i] = false;
     }
 
     for (unsigned j = 0; j < this->instance.num_dimensions; j++) {
-        value[j] = 0;
-        weight[j] = 0;
+        value[j] = 0.0;
+        weight[j] = 0.0;
     }
 
-    std::sort(permutation.begin(), permutation.end());
+    if (this->decoder_type == 0) {
+        bool has_space = true;
 
-    bool has_space = true;
+        for (unsigned i = 0; i < this->instance.num_items && has_space; i++) {
+            if (chromosome[this->instance.greedy_permutation[i]] >= 0.5) {
+                bool item_fits = true;
 
-    for (unsigned i = 0; i < this->instance.num_items && has_space; i++) {
-        bool item_fits = true;
+                for (unsigned j = 0;
+                    j < this->instance.num_dimensions && item_fits;
+                    j++) {
+                    if (weight[j] + this->instance.min_weight[j]
+                            > this->instance.capacity[j]) {
+                        has_space = false;
+                        item_fits = false;
+                    }
 
-        for (unsigned j = 0;
-             j < this->instance.num_dimensions && item_fits;
-             j++) {
-            if (weight[j] + this->instance.min_weight[j]
-                    > this->instance.capacity[j]) {
-                has_space = false;
-                item_fits = false;
-            }
+                    if (weight[j] +
+                            this->instance.weight[this->instance.greedy_permutation[i]][j]
+                            > this->instance.capacity[j]) {
+                        item_fits = false;
+                    }
+                }
 
-            if (weight[j] + this->instance.weight[permutation[i].second][j]
-                    > this->instance.capacity[j]) {
-                item_fits = false;
+                if (item_fits) {
+                    knapsack[this->instance.greedy_permutation[i]] = true;
+
+                    for (unsigned j = 0; j < this->instance.num_dimensions; j++) {
+                        value[j] += this->instance.value[this->instance.greedy_permutation[i]][j];
+                        weight[j] += this->instance.weight[this->instance.greedy_permutation[i]][j];
+                    }
+                }
             }
         }
 
-        if (item_fits) {
-            knapsack[permutation[i].second] = true;
+        for (unsigned i = 0; i < this->instance.num_items && has_space; i++) {
+            if (!knapsack[this->instance.greedy_permutation[i]]) {
+                bool item_fits = true;
 
-            for (unsigned j = 0; j < this->instance.num_dimensions; j++) {
-                value[j] += this->instance.value[permutation[i].second][j];
-                weight[j] += this->instance.weight[permutation[i].second][j];
+                for (unsigned j = 0;
+                    j < this->instance.num_dimensions && item_fits;
+                    j++) {
+                    if (weight[j] + this->instance.min_weight[j]
+                            > this->instance.capacity[j]) {
+                        has_space = false;
+                        item_fits = false;
+                    }
+
+                    if (weight[j]
+                            + this->instance.weight[this->instance.greedy_permutation[i]][j]
+                            > this->instance.capacity[j]) {
+                        item_fits = false;
+                    }
+                }
+
+                if (item_fits) {
+                    knapsack[this->instance.greedy_permutation[i]] = true;
+
+                    for (unsigned j = 0; j < this->instance.num_dimensions; j++) {
+                        value[j] += this->instance.value[this->instance.greedy_permutation[i]][j];
+                        weight[j] += this->instance.weight[this->instance.greedy_permutation[i]][j];
+                    }
+                }
+            }
+        }
+    } else { // decoder_type == 1
+        for (unsigned i = 0; i < this->instance.num_items; i++) {
+            permutation[i] = std::make_pair(chromosome[i], i);
+        }
+
+        std::sort(permutation.begin(), permutation.end());
+
+        bool has_space = true;
+
+        for (unsigned i = 0; i < this->instance.num_items && has_space; i++) {
+            bool item_fits = true;
+
+            for (unsigned j = 0;
+                j < this->instance.num_dimensions && item_fits;
+                j++) {
+                if (weight[j] + this->instance.min_weight[j]
+                        > this->instance.capacity[j]) {
+                    has_space = false;
+                    item_fits = false;
+                }
+
+                if (weight[j] + this->instance.weight[permutation[i].second][j]
+                        > this->instance.capacity[j]) {
+                    item_fits = false;
+                }
+            }
+
+            if (item_fits) {
+                knapsack[permutation[i].second] = true;
+
+                for (unsigned j = 0; j < this->instance.num_dimensions; j++) {
+                    value[j] += this->instance.value[permutation[i].second][j];
+                    weight[j] += this->instance.weight[permutation[i].second][j];
+                }
             }
         }
     }
