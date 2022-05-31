@@ -28,8 +28,8 @@ for i in range(len(instances)):
                 for row in data:
                     x.append(float(row[0]))
             xs.append(x)
-    ax.boxplot(xs, labels = [' '.join(map(str, x)) for x in list(itertools.product([solver_labels[solver] for solver in solvers], [decoder_types_labels[decoder_type] for decoder_type in decoder_types]))])
-    ax.set_xticklabels([' '.join(map(str, x)) for x in list(itertools.product([solver_labels[solver] for solver in solvers], [decoder_types_labels[decoder_type] for decoder_type in decoder_types]))], fontsize = "small", rotation = 0, rotation_mode = "default")
+    ax.boxplot(xs, labels = [' '.join(map(str, x)) for x in list(itertools.product([solver_labels[solver] for solver in solvers], [str(decoder_type) for decoder_type in decoder_types]))])
+    ax.set_xticklabels([' '.join(map(str, x)) for x in list(itertools.product([solver_labels[solver] for solver in solvers], [str(decoder_type) for decoder_type in decoder_types]))], fontsize = "small", rotation = 0, rotation_mode = "default")
 fig.suptitle("Hypervolume", fontsize = "xx-large")
 plt.savefig("hypervolume/hypervolume.png", format = "png")
 plt.close(fig)
@@ -40,7 +40,7 @@ for solver in solvers:
     for decoder_type in decoder_types:
         hypervolume_per_m[solver + " " + str(decoder_type)] = {}
         for m in ms:
-            hypervolume_per_m[solver][m] = []
+            hypervolume_per_m[solver + " " + str(decoder_type)][m] = []
 
 for m in ms:
     for instance in instances_per_m[m]:
@@ -64,8 +64,8 @@ for i in range(len(solvers)):
     for j in range(len(decoder_types)):
         y = []
         for m in ms:
-            y.append(stats.mean(hypervolume_per_m[solvers[i] + " " + decoder_types[j]][m]))
-        plt.plot(ms, y, label = solver_labels[solvers[i]] + " " + decoder_types_labels[decoder_types[j]], marker = (i * len(decoder_types) + j + 3, 2, 0), color = colors[i * len(decoder_types) + j])
+            y.append(stats.mean(hypervolume_per_m[solvers[i] + " " + str(decoder_types[j])][m]))
+        plt.plot(ms, y, label = solver_labels[solvers[i]] + " " + decoder_types_labels[decoder_types[j]], marker = (i * len(decoder_types) + j + 3, 2, 0), color = colors[i * len(decoder_types) + j], alpha=0.8)
 plt.xlim(left = min(ms), right = max(ms))
 plt.ylim(bottom = 0.0, top = 1.0)
 plt.legend(loc = 'best')
@@ -103,7 +103,7 @@ for i in range(len(solvers)):
         y = []
         for size in sizes:
             y.append(stats.mean(hypervolume_per_size[solvers[i] + " " + str(decoder_types[j])][size]))
-        plt.plot(sizes, y, label = solver_labels[solvers[i]] + " " + decoder_types_labels[decoder_types[j]], marker = (i * len(decoder_types) + j + 3, 2, 0), color = colors[i * len(decoder_types) + j])
+        plt.plot(sizes, y, label = solver_labels[solvers[i]] + " " + decoder_types_labels[decoder_types[j]], marker = (i * len(decoder_types) + j + 3, 2, 0), color = colors[i * len(decoder_types) + j], alpha=0.8)
 plt.xlim(left = min(sizes), right = max(sizes))
 plt.ylim(bottom = 0.0, top = 1.0)
 plt.legend(loc = 'best')
