@@ -38,16 +38,14 @@ void Instance::init() {
     }
 }
 
-Instance::Instance(unsigned num_dimensions,
-                   unsigned num_items,
-                   const std::vector<double> & capacity,
+Instance::Instance(const std::vector<double> & capacity,
                    const std::vector<std::vector<double>> & weight,
                    const std::vector<std::vector<double>> & value) :
-    num_dimensions(num_dimensions),
-    num_items(num_items),
     capacity(capacity),
     weight(weight),
-    value(value) {
+    value(value),
+    num_dimensions(capacity.size()),
+    num_items(weight.size()) {
     this->init();
 }
 
@@ -56,18 +54,22 @@ Instance::Instance(const Instance & instance) = default;
 Instance::Instance() = default;
 
 Instance Instance::operator = (const Instance & instance) {
-    this->num_dimensions = instance.num_dimensions;
-    this->num_items = instance.num_items;
     this->capacity = instance.capacity;
     this->weight = instance.weight;
     this->value = instance.value;
+    this->num_dimensions = instance.num_dimensions;
+    this->num_items = instance.num_items;
     this->min_weight = instance.min_weight;
     this->greedy_permutation = instance.greedy_permutation;
     return *this;
 }
 
 bool Instance::is_valid() const {
-    if (this->num_dimensions == 0 || this->num_items == 0) {
+    if (this->num_dimensions == 0) {
+        return false;
+    }
+
+    if (this->num_items == 0) {
         return false;
     }
 

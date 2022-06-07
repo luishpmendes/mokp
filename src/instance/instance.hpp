@@ -11,16 +11,6 @@ namespace mokp {
  ***********************************************/
 class Instance {
     public:
-    /***************************
-     * The number of dimenions.
-     ***************************/
-    unsigned num_dimensions;
-
-    /**************************
-     * The number of items.
-     **************************/
-    unsigned num_items;
-
     /**********************************
      * The capacity on each dimension.
      **********************************/
@@ -35,6 +25,16 @@ class Instance {
      * The value of each item on each dimension.
      ********************************************/
     std::vector<std::vector<double>> value;
+
+    /***************************
+     * The number of dimenions.
+     ***************************/
+    unsigned num_dimensions;
+
+    /**************************
+     * The number of items.
+     **************************/
+    unsigned num_items;
 
     /*******************************************************
      * The minimum weight over all items on each dimension.
@@ -56,15 +56,11 @@ class Instance {
     /******************************************************************
      * Constructs a new instance.
      *
-     * @param num_dimensions The number of dimensions.
-     * @param num_items      The number of items.
      * @param capacity       The capacity of each knapsack.
      * @param weight         The weight of each item on each knapsack.
      * @param value          The profit of each item on each knapsack.
      ******************************************************************/
-    Instance(unsigned num_dimensions,
-             unsigned num_items,
-             const std::vector<double> & capacity,
+    Instance(const std::vector<double> & capacity,
              const std::vector<std::vector<double>> & weight,
              const std::vector<std::vector<double>> & value);
 

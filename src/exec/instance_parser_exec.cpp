@@ -24,7 +24,7 @@ int main () {
         }
     }
 
-    mokp::Instance instance(num_dimensions, num_items, capacity, weight, profit);
+    mokp::Instance instance(capacity, weight, profit);
 
     std::cout << instance;
 
