@@ -2,15 +2,15 @@
 
 instances=(zlt_100_2 zlt_250_2 zlt_500_2 zlt_750_2 zlt_100_3 zlt_250_3 zlt_500_3 zlt_750_3 zlt_100_4 zlt_250_4 zlt_500_4 zlt_750_4)
 solvers=(nsga2 nspso moead mhaco ihs nsbrkga)
-decoder_types=(0 1)
-seeds=(776505114 187342467 815887906 815887906 728692796)
+decoder_types=(1)
+seeds=(319086417 293920772 121513023 317048708 746557472)
 versions=(best median)
 
 num_processes=6
 
 time_limit=3600
-population_size=1000
-max_num_solutions=2500
+population_size=250
+max_num_solutions=500
 max_num_snapshots=60
 
 mkdir -p statistics
