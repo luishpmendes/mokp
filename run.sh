@@ -7,18 +7,18 @@ seeds=(319086417 293920772 121513023 317048708 746557472)
 versions=(best median)
 
 declare -A population_size
-population_size[zlt_100_2]=150
+population_size[zlt_100_2]=152
 population_size[zlt_100_3]=200
-population_size[zlt_100_4]=250
-population_size[zlt_250_2]=150
+population_size[zlt_100_4]=252
+population_size[zlt_250_2]=152
 population_size[zlt_250_3]=200
-population_size[zlt_250_4]=250
+population_size[zlt_250_4]=252
 population_size[zlt_500_2]=200
-population_size[zlt_500_3]=250
+population_size[zlt_500_3]=252
 population_size[zlt_500_4]=300
-population_size[zlt_750_2]=250
+population_size[zlt_750_2]=252
 population_size[zlt_750_3]=300
-population_size[zlt_750_4]=350
+population_size[zlt_750_4]=352
 
 num_processes=6
 
