@@ -10,25 +10,25 @@ namespace mokp {
  **************************************************/
 class NSGA2_Solver : public Solver {
     public:
-    /********************************
+    /*******************************
      * Size of the population.
-     ********************************/
-    unsigned population_size = 1000;
+     *******************************/
+    unsigned population_size = 250;
 
     /************************************
      * Crossover probability.
      ************************************/
-    double crossover_probability = 0.95;
+    double crossover_probability = 0.80;
 
     /**************************************
      * Distribution index for crossover.
      **************************************/
     double crossover_distribution = 10.00;
 
-    /***********************************
+    /************************************
      * Mutation probability.
-     ***********************************/
-    double mutation_probability = 0.01;
+     ************************************/
+    double mutation_probability = 0.006;
 
     /*************************************
      * Distribution index for mutation.

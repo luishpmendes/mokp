@@ -10,10 +10,10 @@ namespace mokp {
  **********************************************/
 class IHS_Solver : public Solver {
     public:
-    /********************************
+    /*******************************
      * Size of the population.
-     ********************************/
-    unsigned population_size = 1000;
+     *******************************/
+    unsigned population_size = 250;
 
     /***************************************
      * Probability of choosing from memory.

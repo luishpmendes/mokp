@@ -14,7 +14,7 @@ class NSBRKGA_Solver : public Solver {
     /********************************************
      * Number of individuals in each population.
      ********************************************/
-    unsigned population_size = 1000;
+    unsigned population_size = 250;
 
     /********************************************************************
      * Minimum percentage of individuals to become the elite set (0, 1].
@@ -26,10 +26,10 @@ class NSBRKGA_Solver : public Solver {
      ********************************************************************/
     double max_elites_percentage = 0.50;
 
-    /***********************************
+    /************************************
      * Mutation probability.
-     ***********************************/
-    double mutation_probability = 0.01;
+     ************************************/
+    double mutation_probability = 0.006;
 
     /************************************
      * Mutation distribution.

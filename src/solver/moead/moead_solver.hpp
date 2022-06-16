@@ -10,16 +10,16 @@ namespace mokp {
  ***********************************************************/
 class MOEAD_Solver : public Solver {
     public:
-    /********************************
+    /*******************************
      * Size of the population.
-     ********************************/
-    unsigned population_size = 1000;
+     *******************************/
+    unsigned population_size = 250;
 
     /******************************************************
      * Method used to generate the weights, one of “grid”,
      * “low discrepancy” or “random”.
      ******************************************************/
-    std::string weight_generation = "random";
+    std::string weight_generation = "low discrepancy";
 
     /******************************************************************
      * Decomposition method: one of “weighted”, “tchebycheff” or “bi”.

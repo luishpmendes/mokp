@@ -10,10 +10,10 @@ namespace mokp {
  ****************************************************/
 class NSPSO_Solver : public Solver {
     public:
-    /********************************
+    /*******************************
      * Size of the population.
-     ********************************/
-    unsigned population_size = 1000;
+     *******************************/
+    unsigned population_size = 250;
 
     /*****************************
      * Particles' inertia weight.
