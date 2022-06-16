@@ -5,8 +5,6 @@ namespace mokp {
 
 void Instance::init() {
     // Compute the minimum weight
-    this->min_weight = std::vector<double>(this->num_dimensions, 0.0);
-
     for (unsigned j = 0; j < this->num_dimensions; j++) {
         this->min_weight[j] = this->weight[0][j];
 
@@ -19,10 +17,10 @@ void Instance::init() {
 
     // Compute the greedy permutation
     std::vector<std::pair<double, unsigned>> permutation (this->num_items);
-    this->greedy_permutation = std::vector<unsigned>(this->num_items);
 
     for (unsigned i = 0; i < this->num_items; i++) {
-        permutation[i] = std::make_pair(this->value[i][0] / this->weight[i][0], i);
+        permutation[i] = std::make_pair(this->value[i][0] / this->weight[i][0],
+                                        i);
 
         for (unsigned j = 1; j < this->num_dimensions; j++) {
             if (permutation[i].first < this->value[i][j] / this->weight[i][j]) {
@@ -35,6 +33,8 @@ void Instance::init() {
 
     for (unsigned i = 0; i < this->num_items; i++) {
         this->greedy_permutation[i] = permutation[i].second;
+        this->greedy_weight[i] = this->weight[this->greedy_permutation[i]];
+        this->greedy_value[i] = this->value[this->greedy_permutation[i]];
     }
 }
 
@@ -45,7 +45,11 @@ Instance::Instance(const std::vector<double> & capacity,
     weight(weight),
     value(value),
     num_dimensions(capacity.size()),
-    num_items(weight.size()) {
+    num_items(weight.size()),
+    min_weight(capacity.size()),
+    greedy_permutation(num_items),
+    greedy_weight(num_items),
+    greedy_value(num_items) {
     this->init();
 }
 
@@ -61,6 +65,8 @@ Instance Instance::operator = (const Instance & instance) {
     this->num_items = instance.num_items;
     this->min_weight = instance.min_weight;
     this->greedy_permutation = instance.greedy_permutation;
+    this->greedy_weight = instance.greedy_weight;
+    this->greedy_value = instance.greedy_value;
     return *this;
 }
 
@@ -85,6 +91,14 @@ bool Instance::is_valid() const {
         return false;
     }
 
+    if (this->greedy_weight.size() != this->num_items) {
+        return false;
+    }
+
+    if (this->greedy_value.size() != this->num_items) {
+        return false;
+    }
+
     for (unsigned i = 0; i < this->num_items; i++) {
         if (this->weight[i].size() != this->num_dimensions) {
             return false;
@@ -94,13 +108,22 @@ bool Instance::is_valid() const {
             return false;
         }
 
-        if (this->greedy_permutation[i] > this->num_items) {
+        if (this->greedy_permutation[i] >= this->num_items) {
+            return false;
+        }
+
+        if (this->greedy_weight[i].size() != this->num_dimensions) {
+            return false;
+        }
+
+        if (this->greedy_value[i].size() != this->num_dimensions) {
             return false;
         }
     }
 
     for (unsigned j = 0; j < this->num_dimensions; j++) {
-        double sum_weight = 0;
+        double sum_weight = 0,
+               sum_greedy_weight = 0;
 
         if (this->min_weight[j] <= 0.0) {
             return false;
@@ -115,10 +138,23 @@ bool Instance::is_valid() const {
                 return false;
             }
 
+            if (this->greedy_weight[i][j] < min_weight[j]) {
+                return false;
+            }
+
+            if (this->greedy_value[i][j] <= 0.0) {
+                return false;
+            }
+
             sum_weight += this->weight[i][j];
+            sum_greedy_weight += this->greedy_weight[i][j];
         }
 
         if (sum_weight < this->capacity[j]) {
+            return false;
+        }
+
+        if (sum_greedy_weight < this->capacity[j]) {
             return false;
         }
     }
@@ -129,11 +165,25 @@ bool Instance::is_valid() const {
 std::istream & operator >>(std::istream & is, Instance & instance) {
     is >> instance.num_dimensions >> instance.num_items;
 
-    instance.capacity = std::vector<double>(instance.num_dimensions);
-    instance.weight = std::vector<std::vector<double>>(instance.num_items,
-                                                       std::vector<double>(instance.num_dimensions));
-    instance.value = std::vector<std::vector<double>>(instance.num_items,
-                                                      std::vector<double>(instance.num_dimensions));
+    instance.capacity.resize(instance.num_dimensions);
+    instance.weight.resize(instance.num_items,
+                           std::vector<double>(instance.num_dimensions));
+    instance.weight.assign(instance.num_items,
+                           std::vector<double>(instance.num_dimensions));
+    instance.value.resize(instance.num_items,
+                          std::vector<double>(instance.num_dimensions));
+    instance.value.assign(instance.num_items,
+                          std::vector<double>(instance.num_dimensions));
+    instance.min_weight.resize(instance.num_dimensions);
+    instance.greedy_permutation.resize(instance.num_items);
+    instance.greedy_weight.resize(instance.num_items,
+                                  std::vector<double>(instance.num_dimensions));
+    instance.greedy_weight.assign(instance.num_items,
+                                  std::vector<double>(instance.num_dimensions));
+    instance.greedy_value.resize(instance.num_items,
+                                 std::vector<double>(instance.num_dimensions));
+    instance.greedy_value.assign(instance.num_items,
+                                 std::vector<double>(instance.num_dimensions));
 
     for (unsigned j = 0; j < instance.num_dimensions; j++) {
         is >> instance.capacity[j];

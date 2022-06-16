@@ -30,6 +30,11 @@ class Solution {
      ****************************************/
     std::vector<bool> knapsack;
 
+    /********************************************************
+     * The knapsack assignment of each item in greedy order.
+     ********************************************************/
+    std::vector<bool> greedy_knapsack;
+
     /**************************
      * The solution's value.
      **************************/

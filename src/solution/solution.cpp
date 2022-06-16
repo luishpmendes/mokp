@@ -32,6 +32,7 @@ Solution::Solution(const Instance & instance,
                    const std::vector<bool> & knapsack) :
         instance(instance),
         knapsack(knapsack),
+        greedy_knapsack(knapsack.size()),
         value(instance.num_dimensions, 0.0),
         weight(instance.num_dimensions, 0.0) {
     // Compute the value and weight
@@ -42,6 +43,9 @@ Solution::Solution(const Instance & instance,
                 this->weight[j] += this->instance.weight[i][j];
             }
         }
+
+        this->greedy_knapsack[i]
+                = this->knapsack[this->instance.greedy_permutation[i]];
     }
 }
 
@@ -50,13 +54,14 @@ Solution::Solution(const Instance & instance,
                    unsigned decoder_type) :
         instance(instance),
         knapsack(instance.num_items, false),
+        greedy_knapsack(instance.num_items, false),
         value(instance.num_dimensions, 0.0),
         weight(instance.num_dimensions, 0.0) {
     if (decoder_type == 0) {
         bool has_space = true;
 
         for (unsigned i = 0; i < this->instance.num_items && has_space; i++) {
-            if (key[this->instance.greedy_permutation[i]] >= 0.5) {
+            if (key[i] >= 0.5) {
                 bool item_fits = true;
 
                 for (unsigned j = 0;
@@ -68,28 +73,25 @@ Solution::Solution(const Instance & instance,
                         item_fits = false;
                     }
 
-                    if (this->weight[j] + 
-                            this->instance.weight[this->instance.greedy_permutation[i]][j]
+                    if (this->weight[j] + this->instance.greedy_weight[i][j]
                             > this->instance.capacity[j]) {
                         item_fits = false;
                     }
                 }
 
                 if (item_fits) {
-                    this->knapsack[this->instance.greedy_permutation[i]] = true;
+                    this->greedy_knapsack[i] = true;
 
                     for (unsigned j = 0; j < this->instance.num_dimensions; j++) {
-                        this->value[j] +=
-                            this->instance.value[this->instance.greedy_permutation[i]][j];
-                        this->weight[j] +=
-                            this->instance.weight[this->instance.greedy_permutation[i]][j];
+                        this->value[j] += this->instance.greedy_value[i][j];
+                        this->weight[j] += this->instance.greedy_weight[i][j];
                     }
                 }
             }
         }
 
         for (unsigned i = 0; i < this->instance.num_items && has_space; i++) {
-            if (!this->knapsack[this->instance.greedy_permutation[i]]) {
+            if (!this->greedy_knapsack[i]) {
                 bool item_fits = true;
 
                 for (unsigned j = 0;
@@ -101,24 +103,26 @@ Solution::Solution(const Instance & instance,
                         item_fits = false;
                     }
 
-                    if (this->weight[j] + 
-                            this->instance.weight[this->instance.greedy_permutation[i]][j]
+                    if (this->weight[j] + this->instance.greedy_weight[i][j]
                             > this->instance.capacity[j]) {
                         item_fits = false;
                     }
                 }
 
                 if (item_fits) {
-                    this->knapsack[this->instance.greedy_permutation[i]] = true;
+                    this->greedy_knapsack[i] = true;
 
                     for (unsigned j = 0; j < this->instance.num_dimensions; j++) {
-                        this->value[j] +=
-                            this->instance.value[this->instance.greedy_permutation[i]][j];
-                        this->weight[j] +=
-                            this->instance.weight[this->instance.greedy_permutation[i]][j];
+                        this->value[j] += this->instance.greedy_value[i][j];
+                        this->weight[j] += this->instance.greedy_weight[i][j];
                     }
                 }
             }
+        }
+
+        for (unsigned i = 0; i < this->instance.num_items; i++) {
+            this->knapsack[this->instance.greedy_permutation[i]] =
+                    this->greedy_knapsack[i];
         }
     } else { // decoder_type == 1
         std::vector<std::pair<double, unsigned>> permutation(this->instance.num_items);
@@ -158,12 +162,18 @@ Solution::Solution(const Instance & instance,
                 }
             }
         }
+
+        for (unsigned i = 0; i < this->instance.num_items; i++) {
+            this->greedy_knapsack[i]
+                    = this->knapsack[this->instance.greedy_permutation[i]];
+        }
     }
 }
 
 Solution::Solution(const Instance & instance) :
         instance(instance),
         knapsack(instance.num_items, false),
+        greedy_knapsack(instance.num_items, false),
         value(instance.num_dimensions, 0.0),
         weight(instance.num_dimensions, 0.0) {}
 
@@ -207,13 +217,20 @@ bool Solution::is_feasible() const {
             }
         }
 
-        if (sum_weight
-                > this->weight[j] + std::numeric_limits<double>::epsilon()) {
+        if (fabs(sum_weight - this->weight[j])
+                > std::numeric_limits<double>::epsilon()) {
             return false;
         }
 
         if (fabs(sum_value - this->value[j])
                 > std::numeric_limits<double>::epsilon()) {
+            return false;
+        }
+    }
+
+    for (unsigned i = 0; i < this->instance.num_items; i++) {
+        if (this->greedy_knapsack[i] 
+                != this->knapsack[this->instance.greedy_permutation[i]]) {
             return false;
         }
     }
@@ -234,6 +251,9 @@ std::istream & operator >>(std::istream & is, Solution & solution) {
         if (aux) {
             solution.knapsack[i] = true;
         }
+
+        solution.greedy_knapsack[i]
+                = solution.knapsack[solution.instance.greedy_permutation[i]];
     }
 
     return is;

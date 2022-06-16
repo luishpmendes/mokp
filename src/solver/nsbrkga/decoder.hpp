@@ -11,13 +11,15 @@ class Decoder {
 
     unsigned decoder_type;
 
-    std::vector<std::vector<bool>> knapsacks;
+    std::vector<std::vector<bool>> greedy_knapsacks;
 
     std::vector<std::vector<double>> values;
 
     std::vector<std::vector<double>> weights;
 
-    std::vector<std::vector<std::pair<double, unsigned>>> permutations;
+    std::vector<std::vector<std::pair<double,
+                                      std::pair<std::vector<double>,
+                                                std::vector<double>>>>> permutations;
 
     Decoder(const Instance & instance,
             unsigned decoder_type,

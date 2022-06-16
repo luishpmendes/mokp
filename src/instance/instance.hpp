@@ -46,6 +46,16 @@ class Instance {
      *********************************************************************/
     std::vector<unsigned> greedy_permutation;
 
+    /*************************************************************
+     * The weight of each item in greedy order on each dimension.
+     *************************************************************/
+    std::vector<std::vector<double>> greedy_weight;
+
+    /************************************************************
+     * The value of each item in greedy order on each dimension.
+     ************************************************************/
+    std::vector<std::vector<double>> greedy_value;
+
     private:
     /*****************************
      * Initializes a new intance.
