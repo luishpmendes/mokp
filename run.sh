@@ -6,10 +6,23 @@ decoder_types=(1)
 seeds=(319086417 293920772 121513023 317048708 746557472)
 versions=(best median)
 
+declare -A population_size
+population_size[zlt_100_2]=150
+population_size[zlt_100_3]=200
+population_size[zlt_100_4]=250
+population_size[zlt_250_2]=150
+population_size[zlt_250_3]=200
+population_size[zlt_250_4]=250
+population_size[zlt_500_2]=200
+population_size[zlt_500_3]=250
+population_size[zlt_500_4]=300
+population_size[zlt_750_2]=250
+population_size[zlt_750_3]=300
+population_size[zlt_750_4]=350
+
 num_processes=6
 
 time_limit=3600
-population_size=250
 max_num_solutions=500
 max_num_snapshots=60
 
@@ -48,7 +61,7 @@ do
                 command+="--time-limit ${time_limit} "
                 command+="--max-num-solutions ${max_num_solutions} "
                 command+="--max-num-snapshots ${max_num_snapshots} "
-                command+="--population-size ${population_size} "
+                command+="--population-size ${population_size[${instance}]} "
                 command+="--statistics statistics/${instance}_${solver}_${decoder_type}_${seed}.txt "
                 command+="--solutions solutions/${instance}_${solver}_${decoder_type}_${seed}_ "
                 command+="--pareto pareto/${instance}_${solver}_${decoder_type}_${seed}.txt "
