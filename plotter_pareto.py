@@ -7,9 +7,6 @@ from plotter_definitions import *
 for m in ms:
     for instance in instances_per_m[m]:
         for version in versions:
-            print("m = " + str(m))
-            print("instance = " + instance)
-            print("version = " + version)
             min_ys = []
             max_ys = []
             for i in range(m):
@@ -45,8 +42,8 @@ for m in ms:
                         with open(filename) as csv_file:
                             data = csv.reader(csv_file, delimiter = " ")
                             for row in data:
-                                for j in range(m):
-                                    ys[j].append(float(row[j]))
+                                for l in range(m):
+                                    ys[l].append(float(row[l]))
                             csv_file.close()
                         for k in range(m):
                             for l in range(m):
