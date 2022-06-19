@@ -1,0 +1,23 @@
+Number of dimensions: 4
+Number of items: 750
+Decoder type: 0
+Seed: 317048708
+Time limit: 3600
+Iterations limit: 4294967295
+Initial individuals: 0
+Maximum number of solutions: 500
+Maximum number of snapshots: 60
+Number of iterations: 162028
+Solutions obtained: 146
+Solving time: 3600.03
+Number of snapshots: 61
+Time between snapshots: 60
+Time when the last snapshot was taken: 3600.02
+Number of iterations between the snapshots: 71582788
+Iteration when the last snapshot was taken: 162028
+Population size: 352
+Probability of choosing from memory: 0.85
+Minimum pitch adjustment rate: 0.35
+Maximum pitch adjustment rate: 0.99
+Minimum distance bandwidth: 1e-05
+Maximum distance bandwidth: 1
