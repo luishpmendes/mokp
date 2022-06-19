@@ -76,7 +76,7 @@ for i in range(len(solvers)):
             y.append(stats.mean(hypervolume_per_solver[solvers[i] + " " + str(decoder_types[j])][k]))
             if max_time < max(time_per_solver[solvers[i] + " " + str(decoder_types[j])][k]):
                 max_time = max(time_per_solver[solvers[i] + " " + str(decoder_types[j])][k])
-        plt.plot(x, y, label = solver_labels[solvers[j]] + " " + decoder_types_labels[decoder_types[j]], marker = (i * len(decoder_types) + j + 3, 2, 0), color = colors[i * len(decoder_types) + j], alpha=0.80)
+        plt.plot(x, y, label = solver_labels[solvers[i]] + " " + decoder_types_labels[decoder_types[j]], marker = (i * len(decoder_types) + j + 3, 2, 0), color = colors[i * len(decoder_types) + j], alpha=0.80)
 plt.xlim(left = 0, right = max_time)
 plt.ylim(bottom = 0.0, top = 1.0)
 plt.legend(loc = 'best')
