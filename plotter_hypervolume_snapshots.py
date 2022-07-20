@@ -34,6 +34,7 @@ for version in versions:
         ax.legend(loc = 'best')
     fig.suptitle("Hypervolume", fontsize = "xx-large")
     plt.savefig("hypervolume_snapshots/hypervolume_snapshots_" + version + ".png", format = "png")
+    plt.savefig("hypervolume_snapshots/hypervolume_snapshots_" + version + ".eps", format = "eps")
     plt.close(fig)
 
 hypervolume_per_solver = {}
@@ -62,7 +63,7 @@ for instance in instances:
                             i += 1
                         csv_file.close()
 
-plt.figure()
+plt.figure(figsize=(5, 5), constrained_layout = True)
 plt.title("Hypervolume x Time")
 plt.xlabel("Time (s)")
 plt.ylabel("Hypervolume")
@@ -81,4 +82,5 @@ plt.xlim(left = 0, right = max_time)
 plt.ylim(bottom = 0.0, top = 1.0)
 plt.legend(loc = 'best')
 plt.savefig("hypervolume_snapshots/hypervolume_snapshots.png", format = "png")
+plt.savefig("hypervolume_snapshots/hypervolume_snapshots.eps", format = "eps")
 plt.close()

@@ -62,5 +62,6 @@ for m in ms:
                                     axs[k][l].scatter(x = ys[l], y = ys[k], color = colors[i * len(decoder_types) + j], label = solver_labels[solvers[i]] + " " + decoder_types_labels[decoder_types[j]], marker = (i * len(decoder_types) + j + 3, 2, 0), alpha = 0.80)
                                     axs[k][l].legend(loc = "best")
                         del ys
-            plt.subplots_adjust(wspace = 0.15 + 0.05 * m, hspace = 0.15 + 0.05 * m)
+            plt.subplots_adjust(wspace = 0.16 + 0.07 * m, hspace = 0.16 + 0.07 * m)
             plt.savefig("pareto/" + instance + "_" + version + ".png", format = "png")
+            plt.savefig("pareto/" + instance + "_" + version + ".eps", format = "eps")
