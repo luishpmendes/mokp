@@ -32,6 +32,7 @@ for i in range(len(instances)):
     ax.set_xticklabels([' '.join(map(str, x)) for x in list(itertools.product([solver_labels[solver] for solver in solvers], [str(decoder_type) for decoder_type in decoder_types]))], fontsize = "small", rotation = 0, rotation_mode = "default")
 fig.suptitle("Hypervolume", fontsize = "xx-large")
 plt.savefig("hypervolume/hypervolume.png", format = "png")
+plt.savefig("hypervolume/hypervolume.eps", format = "eps")
 plt.close(fig)
 
 hypervolume_per_m = {}
@@ -70,6 +71,7 @@ plt.xlim(left = min(ms), right = max(ms))
 plt.ylim(bottom = 0.0, top = 1.0)
 plt.legend(loc = 'best')
 plt.savefig("hypervolume/hypervolume_per_m.png", format = "png")
+plt.savefig("hypervolume/hypervolume_per_m.eps", format = "eps")
 plt.close()
 
 hypervolume_per_size = {}
@@ -108,4 +110,5 @@ plt.xlim(left = min(sizes), right = max(sizes))
 plt.ylim(bottom = 0.0, top = 1.0)
 plt.legend(loc = 'best')
 plt.savefig("hypervolume/hypervolume_per_size.png", format = "png")
+plt.savefig("hypervolume/hypervolume_per_size.eps", format = "eps")
 plt.close()
