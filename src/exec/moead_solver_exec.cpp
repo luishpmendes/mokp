@@ -7,6 +7,7 @@ int main (int argc, char * argv[]) {
     if(arg_parser.option_exists("--instance")) {
         std::ifstream ifs;
         mokp::Instance instance;
+
         ifs.open(arg_parser.option_value("--instance"));
 
         if(ifs.is_open()) {

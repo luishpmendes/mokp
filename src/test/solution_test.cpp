@@ -134,7 +134,7 @@ int main() {
         }
     }
 
-    std::cout << std::endl << "Instance Test PASSED" << std::endl;
+    std::cout << std::endl << "Solution Test PASSED" << std::endl;
 
     return 0;
 }

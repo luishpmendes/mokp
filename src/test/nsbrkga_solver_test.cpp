@@ -188,7 +188,7 @@ int main() {
 
             for (const unsigned & num_fronts : std::get<2>(snapshot)) {
                 assert(num_fronts > 0);
-                assert(num_fronts < solver.population_size);
+                assert(num_fronts <= solver.population_size);
             }
         }
 
