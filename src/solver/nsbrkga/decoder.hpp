@@ -1,6 +1,7 @@
 #pragma once
 
 #include "chromosome.hpp"
+#include "instance/instance.hpp"
 
 namespace mokp {
 
