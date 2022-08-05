@@ -46,7 +46,7 @@ int main(int argc, char * argv[]) {
         ofs.open(arg_parser.option_value("--hypervolumes"));
 
         if(ofs.is_open()) {
-            for(const auto hv : hypervolumes) {
+            for(const std::pair<double, unsigned> & hv : hypervolumes) {
                 ofs << hv.first << std::endl;
 
                 if(ofs.eof() || ofs.fail() || ofs.bad()) {

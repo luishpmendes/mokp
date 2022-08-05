@@ -7,18 +7,18 @@ int main() {
     std::ifstream ifs;
     mokp::Instance instance;
 
-    for (const std::string & filename : {"instances/zlt_100_2.txt",
-                                         "instances/zlt_100_3.txt",
-                                         "instances/zlt_100_4.txt",
-                                         "instances/zlt_250_2.txt",
-                                         "instances/zlt_250_3.txt",
-                                         "instances/zlt_250_4.txt",
-                                         "instances/zlt_500_2.txt",
-                                         "instances/zlt_500_3.txt",
-                                         "instances/zlt_500_4.txt",
-                                         "instances/zlt_750_2.txt",
-                                         "instances/zlt_750_3.txt",
-                                         "instances/zlt_750_4.txt"}) {
+    for (const std::string filename : {"instances/zlt_100_2.txt",
+                                       "instances/zlt_100_3.txt",
+                                       "instances/zlt_100_4.txt",
+                                       "instances/zlt_250_2.txt",
+                                       "instances/zlt_250_3.txt",
+                                       "instances/zlt_250_4.txt",
+                                       "instances/zlt_500_2.txt",
+                                       "instances/zlt_500_3.txt",
+                                       "instances/zlt_500_4.txt",
+                                       "instances/zlt_750_2.txt",
+                                       "instances/zlt_750_3.txt",
+                                       "instances/zlt_750_4.txt"}) {
         std::cout << filename << std::endl;
 
         ifs.open(filename);

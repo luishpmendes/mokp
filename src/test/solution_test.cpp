@@ -11,10 +11,10 @@ int main() {
     std::mt19937 rng(2351389233);
     std::uniform_real_distribution<double> distribution(0.0, 1.0);
 
-    for (const std::string & filename : {"instances/zlt_100_2.txt",
-                                         "instances/zlt_100_3.txt",
-                                         "instances/zlt_250_2.txt",
-                                         "instances/zlt_500_2.txt"}) {
+    for (const std::string filename : {"instances/zlt_100_2.txt",
+                                       "instances/zlt_100_3.txt",
+                                       "instances/zlt_250_2.txt",
+                                       "instances/zlt_500_2.txt"}) {
         std::cout << filename << std::endl;
 
         ifs.open(filename);

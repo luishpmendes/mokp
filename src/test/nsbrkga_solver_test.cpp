@@ -9,10 +9,10 @@ int main() {
     mokp::Instance instance;
     mokp::NSBRKGA_Solver solver;
 
-    for (const std::string & filename : {"instances/zlt_100_2.txt",
-                                         "instances/zlt_100_3.txt",
-                                         "instances/zlt_250_2.txt",
-                                         "instances/zlt_500_2.txt"}) {
+    for (const std::string filename : {"instances/zlt_100_2.txt",
+                                       "instances/zlt_100_3.txt",
+                                       "instances/zlt_250_2.txt",
+                                       "instances/zlt_500_2.txt"}) {
         std::cout << filename << std::endl;
 
         ifs.open(filename);
@@ -32,7 +32,7 @@ int main() {
         solver.population_size = 32;
         solver.max_num_snapshots = 16;
 
-        assert(solver.seed = 2351389233);
+        assert((solver.seed = 2351389233));
         assert(fabs(solver.time_limit - 5.0) <
             std::numeric_limits<double>::epsilon());
         assert(solver.iterations_limit == 100);
@@ -53,7 +53,7 @@ int main() {
         assert(solver.diversity_type ==
             BRKGA::DiversityFunctionType::AVERAGE_DISTANCE_TO_CENTROID);
         assert(solver.num_populations == 1);
-        assert(solver.pr_number_pairs = 100);
+        assert((solver.pr_number_pairs = 100));
         assert(fabs(solver.pr_min_dist - 0.15) <
             std::numeric_limits<double>::epsilon());
         assert(solver.pr_selection ==
