@@ -26,7 +26,7 @@ class Solver {
     /**************************
      * The decoder type
      **************************/
-    unsigned decoder_type = 0;
+    unsigned decoder_type = 1;
 
     /****************************************************************
      * The seed for the pseudo-random numbers generator.
