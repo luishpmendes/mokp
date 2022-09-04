@@ -2,12 +2,25 @@ import csv
 import matplotlib.pyplot as plt
 import os
 import statistics as stats
-import itertools
-from math import floor, sqrt
+from math import ceil, floor, sqrt
 from plotter_definitions import *
 
+min_hypervolume = 1.0
+max_hypervolume = 0.0
+for instance in instances:
+    for solver in solvers:
+        filename = "hypervolume/" + instance + "_" + solver + ".txt"
+        with open(filename) as csv_file:
+            data = csv.reader(csv_file)
+            for row in data:
+                min_hypervolume = min(min_hypervolume, float(row[0]))
+                max_hypervolume = max(max_hypervolume, float(row[0]))
+delta_hypervolume = max_hypervolume - min_hypervolume
+min_hypervolume = max(min_hypervolume - round(0.025 * delta_hypervolume), 0.00)
+max_hypervolume = min(max_hypervolume + round(0.025 * delta_hypervolume), 1.00)
+
 num_rows = floor(sqrt(len(instances)))
-num_cols = int(len(instances)/floor(sqrt(len(instances))))
+num_cols = ceil(len(instances)/floor(sqrt(len(instances))))
 fig = plt.figure(figsize = (5 * num_cols, 5 * num_rows), constrained_layout = True)
 figs = fig.subfigures(nrows = num_rows, ncols = num_cols, wspace = 0.05, hspace = 0.05)
 for i in range(len(instances)):
@@ -17,98 +30,166 @@ for i in range(len(instances)):
     ax = figs[row][col].subplots()
     ax.set_ylabel("Hypervolume", fontsize = "large")
     ax.set_xlabel("Solver", fontsize = "large")
-    ax.set_ylim(bottom = 0, top = 1)
     xs = []
     for solver in solvers:
-        for decoder_type in decoder_types:
-            filename = "hypervolume/" + instances[i] + "_" + solver + "_" + str(decoder_type) + ".txt"
-            x = []
-            with open(filename) as csv_file:
-                data = csv.reader(csv_file)
-                for row in data:
-                    x.append(float(row[0]))
-            xs.append(x)
-    ax.boxplot(xs, labels = [' '.join(map(str, x)) for x in list(itertools.product([solver_labels[solver] for solver in solvers], [str(decoder_type) for decoder_type in decoder_types]))])
-    ax.set_xticklabels([' '.join(map(str, x)) for x in list(itertools.product([solver_labels[solver] for solver in solvers], [str(decoder_type) for decoder_type in decoder_types]))], fontsize = "small", rotation = 0, rotation_mode = "default")
-fig.suptitle("Hypervolume", fontsize = "xx-large")
+        filename = "hypervolume/" + instances[i] + "_" + solver + ".txt"
+        x = []
+        with open(filename) as csv_file:
+            data = csv.reader(csv_file)
+            for row in data:
+                x.append(float(row[0]))
+        xs.append(x)
+    bp = ax.boxplot(xs, labels = [solver_labels[solver] for solver in solvers], patch_artist = True)
+    for j in range(len(solvers)) :
+        bp["boxes"][j].set_facecolor(colors[j])
+        bp["medians"][j].set_color("black")
+    ax.set_ylim(bottom = min_hypervolume, top = max_hypervolume)
+fig.suptitle("MOKP", fontsize = "xx-large")
 plt.savefig("hypervolume/hypervolume.png", format = "png")
-plt.savefig("hypervolume/hypervolume.eps", format = "eps")
 plt.close(fig)
+
+hypervolume = []
+
+for solver in solvers:
+    hypervolume.append([])
+
+for instance in instances:
+    for i in range(len(solvers)):
+        for seed in seeds:
+            filename = "hypervolume/" + instance + "_" + solvers[i] + "_" + str(seed) + ".txt"
+            if os.path.exists(filename):
+                with open(filename) as csv_file:
+                    data = csv.reader(csv_file, delimiter = ",")
+                    for row in data:
+                        hypervolume[i].append(float(row[0]))
+                    csv_file.close()
+
+plt.figure()
+plt.title("MOKP", fontsize = "xx-large")
+plt.xlabel("Solver", fontsize = "x-large")
+plt.ylabel("Hypervolume", fontsize = "x-large")
+bp = plt.boxplot(hypervolume, labels = [solver_labels[solver] for solver in solvers], patch_artist = True)
+for i in range(len(solvers)) :
+    bp["boxes"][i].set_facecolor(colors[i])
+    bp["medians"][i].set_color("black")
+plt.ylim(bottom = min_hypervolume, top = max_hypervolume)
+plt.savefig("hypervolume/hypervolumes.png", format = "png")
+plt.close()
 
 hypervolume_per_m = {}
 
 for solver in solvers:
-    for decoder_type in decoder_types:
-        hypervolume_per_m[solver + " " + str(decoder_type)] = {}
-        for m in ms:
-            hypervolume_per_m[solver + " " + str(decoder_type)][m] = []
+    hypervolume_per_m[solver] = {}
+    for m in ms:
+        hypervolume_per_m[solver][m] = []
 
 for m in ms:
     for instance in instances_per_m[m]:
         for solver in solvers:
-            for decoder_type in decoder_types:
-                for seed in seeds:
-                    filename = "hypervolume/" + instance + "_" + solver + "_" + str(decoder_type) + "_" + str(seed) + ".txt"
-                    if os.path.exists(filename):
-                        with open(filename) as csv_file:
-                            data = csv.reader(csv_file, delimiter = ",")
-                            for row in data:
-                                hypervolume_per_m[solver + " " + str(decoder_type)][m].append(float(row[0]))
-                            csv_file.close()
+            for seed in seeds:
+                filename = "hypervolume/" + instance + "_" + solver + "_" + str(seed) + ".txt"
+                if os.path.exists(filename):
+                    with open(filename) as csv_file:
+                        data = csv.reader(csv_file, delimiter = ",")
+                        for row in data:
+                            hypervolume_per_m[solver][m].append(float(row[0]))
+                        csv_file.close()
 
 plt.figure()
-plt.title("Hypervolume x Number of Objectives")
-plt.xlabel("Number of Objectives")
-plt.ylabel("Hypervolume")
-plt.xticks(ms)
+plt.title("MOKP", fontsize = "xx-large")
+plt.xlabel("Number of Objectives", fontsize = "x-large")
+plt.ylabel("Hypervolume", fontsize = "x-large")
 for i in range(len(solvers)):
-    for j in range(len(decoder_types)):
-        y = []
-        for m in ms:
-            y.append(stats.mean(hypervolume_per_m[solvers[i] + " " + str(decoder_types[j])][m]))
-        plt.plot(ms, y, label = solver_labels[solvers[i]] + " " + decoder_types_labels[decoder_types[j]], marker = (i * len(decoder_types) + j + 3, 2, 0), color = colors[i * len(decoder_types) + j], alpha=0.8)
-plt.xlim(left = min(ms), right = max(ms))
-plt.ylim(bottom = 0.0, top = 1.0)
-plt.legend(loc = 'best')
-plt.savefig("hypervolume/hypervolume_per_m.png", format = "png")
-plt.savefig("hypervolume/hypervolume_per_m.eps", format = "eps")
+    y = []
+    for m in ms:
+        y.append(stats.mean(hypervolume_per_m[solvers[i]][m]))
+    plt.plot(ms, y, label = solver_labels[solvers[i]], marker = (i + 3, 2, 0), color = colors[i], alpha = 0.80)
+plt.xlim(left = max(min(ms) - 1, 0), right = max(ms) + 1)
+plt.ylim(bottom = min_hypervolume, top = max_hypervolume)
+plt.legend(loc = 'best', fontsize = "large")
+plt.savefig("hypervolume/hypervolume_mean_per_m.png", format = "png")
+plt.close()
+
+plt.figure()
+plt.title("MOKP", fontsize = "xx-large")
+plt.xlabel("Number of Objectives", fontsize = "x-large")
+plt.ylabel("Hypervolume", fontsize = "x-large")
+for i in range(len(solvers)):
+    y0 = []
+    y2 = []
+    for m in ms:
+        quantiles = stats.quantiles(hypervolume_per_m[solvers[i]][m])
+        y0.append(quantiles[0])
+        y2.append(quantiles[2])
+    plt.fill_between(ms, y0, y2, color = colors[i], alpha = 0.25)
+for i in range(len(solvers)):
+    y1 = []
+    for m in ms:
+        quantiles = stats.quantiles(hypervolume_per_m[solvers[i]][m])
+        y1.append(quantiles[1])
+    plt.plot(ms, y1, label = solver_labels[solvers[i]], marker = (i + 3, 2, 0), color = colors[i], alpha = 0.75)
+plt.xlim(left = max(min(ms) - 1, 0), right = max(ms) + 1)
+plt.ylim(bottom = min_hypervolume, top = max_hypervolume)
+plt.legend(loc = 'best', fontsize = "large")
+plt.savefig("hypervolume/hypervolume_quartiles_per_m.png", format = "png")
 plt.close()
 
 hypervolume_per_size = {}
 
 for solver in solvers:
-    for decoder_type in decoder_types:
-        hypervolume_per_size[solver + " " + str(decoder_type)] = {}
-        for size in sizes:
-            hypervolume_per_size[solver + " " + str(decoder_type)][size] = []
+    hypervolume_per_size[solver] = {}
+    for size in sizes:
+        hypervolume_per_size[solver][size] = []
 
 for size in sizes:
     for instance in instances_per_size[size]:
         for solver in solvers:
-            for decoder_type in decoder_types:
-                for seed in seeds:
-                    filename = "hypervolume/" + instance + "_" + solver + "_" + str(decoder_type) + "_" + str(seed) + ".txt"
-                    if os.path.exists(filename):
-                        with open(filename) as csv_file:
-                            data = csv.reader(csv_file, delimiter = ",")
-                            for row in data:
-                                hypervolume_per_size[solver + " " + str(decoder_type)][size].append(float(row[0]))
-                            csv_file.close()
+            for seed in seeds:
+                filename = "hypervolume/" + instance + "_" + solver + "_" + str(seed) + ".txt"
+                if os.path.exists(filename):
+                    with open(filename) as csv_file:
+                        data = csv.reader(csv_file, delimiter = ",")
+                        for row in data:
+                            hypervolume_per_size[solver][size].append(float(row[0]))
+                        csv_file.close()
 
 plt.figure()
-plt.title("Hypervolume x Number of Items")
-plt.xlabel("Number of Items")
-plt.ylabel("Hypervolume")
+plt.title("MOKP", fontsize = "xx-large")
+plt.xlabel("Number of Items", fontsize = "x-large")
+plt.ylabel("Hypervolume", fontsize = "x-large")
 plt.xticks(sizes)
 for i in range(len(solvers)):
-    for j in range(len(decoder_types)):
-        y = []
-        for size in sizes:
-            y.append(stats.mean(hypervolume_per_size[solvers[i] + " " + str(decoder_types[j])][size]))
-        plt.plot(sizes, y, label = solver_labels[solvers[i]] + " " + decoder_types_labels[decoder_types[j]], marker = (i * len(decoder_types) + j + 3, 2, 0), color = colors[i * len(decoder_types) + j], alpha=0.8)
-plt.xlim(left = min(sizes), right = max(sizes))
-plt.ylim(bottom = 0.0, top = 1.0)
-plt.legend(loc = 'best')
-plt.savefig("hypervolume/hypervolume_per_size.png", format = "png")
-plt.savefig("hypervolume/hypervolume_per_size.eps", format = "eps")
+    y = []
+    for size in sizes:
+        y.append(stats.mean(hypervolume_per_size[solvers[i]][size]))
+    plt.plot(sizes, y, label = solver_labels[solvers[i]], marker = (i + 3, 2, 0), color = colors[i], alpha = 0.80)
+plt.xlim(left = max(min(sizes) - 1, 0), right = max(sizes) + 1)
+plt.ylim(bottom = min_hypervolume, top = max_hypervolume)
+plt.legend(loc = 'best', fontsize = "x-large")
+plt.savefig("hypervolume/hypervolume_mean_per_size.png", format = "png")
+plt.close()
+
+plt.figure()
+plt.title("MOKP", fontsize = "xx-large")
+plt.xlabel("Number of Items", fontsize = "x-large")
+plt.ylabel("Hypervolume", fontsize = "x-large")
+plt.xticks(sizes)
+for i in range(len(solvers)):
+    y0 = []
+    y2 = []
+    for size in sizes:
+        quantiles = stats.quantiles(hypervolume_per_size[solvers[i]][size])
+        y0.append(quantiles[0])
+        y2.append(quantiles[2])
+    plt.fill_between(sizes, y0, y2, color = colors[i], alpha = 0.25)
+for i in range(len(solvers)):
+    y1 = []
+    for size in sizes:
+        quantiles = stats.quantiles(hypervolume_per_size[solvers[i]][size])
+        y1.append(quantiles[1])
+    plt.plot(sizes, y1, label = solver_labels[solvers[i]], marker = (i + 3, 2, 0), color = colors[i], alpha = 0.75)
+plt.xlim(left = max(min(sizes) - 1, 0), right = max(sizes) + 1)
+plt.ylim(bottom = min_hypervolume, top = max_hypervolume)
+plt.legend(loc = 'best', fontsize = "x-large")
+plt.savefig("hypervolume/hypervolume_mean_per_size.png", format = "png")
 plt.close()
