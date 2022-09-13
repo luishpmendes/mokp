@@ -172,6 +172,7 @@ for instance in ${instances[@]}
 do
     command="./bin/exec/hypervolume_calculator_exec "
     command+="--instance instances/${instance}.txt "
+    command+="--reference-pareto pareto/${instance}.txt "
     j=0;
     for solver in ${solvers[@]}
     do
