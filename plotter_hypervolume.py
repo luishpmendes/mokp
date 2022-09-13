@@ -28,7 +28,7 @@ for i in range(len(instances)):
     col = i%num_cols
     figs[row][col].suptitle(instances[i], fontsize = "x-large")
     ax = figs[row][col].subplots()
-    ax.set_ylabel("Hypervolume", fontsize = "large")
+    ax.set_ylabel("Hypervolume Ratio", fontsize = "large")
     ax.set_xlabel("Solver", fontsize = "large")
     xs = []
     for solver in solvers:
@@ -67,7 +67,7 @@ for instance in instances:
 plt.figure()
 plt.title("MOKP", fontsize = "xx-large")
 plt.xlabel("Solver", fontsize = "x-large")
-plt.ylabel("Hypervolume", fontsize = "x-large")
+plt.ylabel("Hypervolume Ratio", fontsize = "x-large")
 bp = plt.boxplot(hypervolume, labels = [solver_labels[solver] for solver in solvers], patch_artist = True)
 for i in range(len(solvers)) :
     bp["boxes"][i].set_facecolor(colors[i])
@@ -98,7 +98,8 @@ for m in ms:
 plt.figure()
 plt.title("MOKP", fontsize = "xx-large")
 plt.xlabel("Number of Objectives", fontsize = "x-large")
-plt.ylabel("Hypervolume", fontsize = "x-large")
+plt.ylabel("Hypervolume Ratio", fontsize = "x-large")
+plt.xticks(ms)
 for i in range(len(solvers)):
     y = []
     for m in ms:
@@ -113,7 +114,8 @@ plt.close()
 plt.figure()
 plt.title("MOKP", fontsize = "xx-large")
 plt.xlabel("Number of Objectives", fontsize = "x-large")
-plt.ylabel("Hypervolume", fontsize = "x-large")
+plt.ylabel("Hypervolume Ratio", fontsize = "x-large")
+plt.xticks(ms)
 for i in range(len(solvers)):
     y0 = []
     y2 = []
@@ -156,7 +158,7 @@ for size in sizes:
 plt.figure()
 plt.title("MOKP", fontsize = "xx-large")
 plt.xlabel("Number of Items", fontsize = "x-large")
-plt.ylabel("Hypervolume", fontsize = "x-large")
+plt.ylabel("Hypervolume Ratio", fontsize = "x-large")
 plt.xticks(sizes)
 for i in range(len(solvers)):
     y = []
@@ -165,14 +167,14 @@ for i in range(len(solvers)):
     plt.plot(sizes, y, label = solver_labels[solvers[i]], marker = (i + 3, 2, 0), color = colors[i], alpha = 0.80)
 plt.xlim(left = max(min(sizes) - 1, 0), right = max(sizes) + 1)
 plt.ylim(bottom = min_hypervolume, top = max_hypervolume)
-plt.legend(loc = 'best', fontsize = "x-large")
+plt.legend(loc = 'best', fontsize = "large")
 plt.savefig("hypervolume/hypervolume_mean_per_size.png", format = "png")
 plt.close()
 
 plt.figure()
 plt.title("MOKP", fontsize = "xx-large")
 plt.xlabel("Number of Items", fontsize = "x-large")
-plt.ylabel("Hypervolume", fontsize = "x-large")
+plt.ylabel("Hypervolume Ratio", fontsize = "x-large")
 plt.xticks(sizes)
 for i in range(len(solvers)):
     y0 = []
@@ -190,6 +192,6 @@ for i in range(len(solvers)):
     plt.plot(sizes, y1, label = solver_labels[solvers[i]], marker = (i + 3, 2, 0), color = colors[i], alpha = 0.75)
 plt.xlim(left = max(min(sizes) - 1, 0), right = max(sizes) + 1)
 plt.ylim(bottom = min_hypervolume, top = max_hypervolume)
-plt.legend(loc = 'best', fontsize = "x-large")
-plt.savefig("hypervolume/hypervolume_mean_per_size.png", format = "png")
+plt.legend(loc = 'best', fontsize = "large")
+plt.savefig("hypervolume/hypervolume_quartiles_per_size.png", format = "png")
 plt.close()
