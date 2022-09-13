@@ -109,7 +109,55 @@ eval $final_command
 
 wait
 
-solvers=(nsga2 nspso moead mhaco ihs nsbrkga)
+commands=()
+
+for ((i=0;i<num_processes;i++))
+do
+    commands[$i]="("
+done
+
+i=0
+
+for instance in ${instances[@]}
+do
+    command="./bin/exec/reference_pareto_front_calculator_exec "
+    command+="--instance instances/${instance}.txt "
+    j=0;
+    for solver in ${solvers[@]}
+    do
+        for seed in ${seeds[@]}
+        do
+            command+="--pareto-${j} pareto/${instance}_${solver}_${seed}.txt "
+            command+="--best-solutions-snapshots-${j} best_solutions_snapshots/${instance}_${solver}_${seed}_ "
+            command+="--reference-pareto pareto/${instance}.txt "
+            j=$((j+1))
+        done
+    done
+    if [ $i -lt $num_processes ]
+    then
+        commands[$i]+="$command"
+    else
+        commands[$((i%num_processes))]+=" && $command"
+    fi
+    i=$((i+1))
+done
+
+for ((i=0;i<num_processes;i++))
+do
+    commands[$i]+=") &>> log_${i}.txt"
+done
+
+final_command=""
+
+for ((i=0;i<num_processes;i++))
+do
+    command=${commands[$i]}
+    final_command+="$command & "
+done
+
+eval $final_command
+
+wait
 
 commands=()
 
