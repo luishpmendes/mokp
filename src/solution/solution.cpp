@@ -126,14 +126,13 @@ Solution::Solution(const Instance & instance,
         }
     } else { // decoder_type == 1
         std::vector<std::pair<double, unsigned>> permutation(this->instance.num_items);
+        bool has_space = true;
 
         for (unsigned i = 0; i < this->instance.num_items; i++) {
             permutation[i] = std::make_pair(key[i], i);
         }
 
         std::sort(permutation.begin(), permutation.end());
-
-        bool has_space = true;
 
         for (unsigned i = 0; i < this->instance.num_items && has_space; i++) {
             bool item_fits = true;

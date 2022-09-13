@@ -15,9 +15,8 @@ Decoder::Decoder(const Instance & instance,
       weights(num_threads,
             std::vector<double>(instance.num_dimensions, 0.0)),
       permutations(num_threads,
-                   std::vector<std::pair<double,
-                                        std::pair<std::vector<double>,
-                                                  std::vector<double>>>>(instance.num_items)) {}
+                   std::vector<std::pair<double, unsigned>>(
+                        instance.num_items)) {}
 
 std::vector<double> Decoder::decode(BRKGA::Chromosome & chromosome,
                                     bool /* not used */) {
@@ -26,18 +25,14 @@ std::vector<double> Decoder::decode(BRKGA::Chromosome & chromosome,
                 = this->greedy_knapsack[omp_get_thread_num()];
         std::vector<double> & value = this->values[omp_get_thread_num()];
         std::vector<double> & weight = this->weights[omp_get_thread_num()];
-        std::vector<std::pair<double,
-                              std::pair<std::vector<double>,
-                                        std::vector<double>>>> & permutation
-                                            = this->permutations[omp_get_thread_num()];
+        std::vector<std::pair<double, unsigned>> & permutation =
+                this->permutations[omp_get_thread_num()];
 #   else
         std::vector<bool> & greedy_knapsack = this->greedy_knapsacks.front();
         std::vector<double> & value = this->values.front();
         std::vector<double> & weight = this->weights.front();
-        std::vector<std::pair<double,
-                              std::pair<std::vector<double>,
-                                        std::vector<double>>>> & permutation
-                                                = this->permutations.front();
+        std::vector<std::pair<double, unsigned>> & permutation = 
+                this->permutations.front();
 #   endif
 
     greedy_knapsack.assign(this->instance.num_items, false);
@@ -110,9 +105,7 @@ std::vector<double> Decoder::decode(BRKGA::Chromosome & chromosome,
         bool has_space = true;
 
         for (unsigned i = 0; i < this->instance.num_items; i++) {
-            permutation[i] = std::make_pair(chromosome[i],
-                                            std::make_pair(this->instance.weight[i],
-                                                           this->instance.value[i]));
+            permutation[i] = std::make_pair(chromosome[i], i);
         }
 
         std::sort(permutation.begin(), permutation.end());
@@ -129,7 +122,7 @@ std::vector<double> Decoder::decode(BRKGA::Chromosome & chromosome,
                     item_fits = false;
                 }
 
-                if (weight[j] + permutation[i].second.first[j]
+                if (weight[j] + this->instance.weight[permutation[i].second][j]
                         > this->instance.capacity[j]) {
                     item_fits = false;
                 }
@@ -137,8 +130,8 @@ std::vector<double> Decoder::decode(BRKGA::Chromosome & chromosome,
 
             if (item_fits) {
                 for (unsigned j = 0; j < this->instance.num_dimensions; j++) {
-                    value[j] += permutation[i].second.second[j];
-                    weight[j] += permutation[i].second.first[j];
+                    value[j] += this->instance.value[permutation[i].second][j];
+                    weight[j] += this->instance.weight[permutation[i].second][j];
                 }
             }
         }
