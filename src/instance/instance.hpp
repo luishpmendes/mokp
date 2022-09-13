@@ -1,8 +1,11 @@
 #pragma once
 
+#define NSBRKGA_MULTIPLE_INCLUSIONS
+
 #include <istream>
 #include <ostream>
 #include <vector>
+#include "nsbrkga.hpp"
 
 namespace mokp {
 /***********************************************
@@ -35,6 +38,11 @@ class Instance {
      * The number of items.
      **************************/
     unsigned num_items;
+
+    /*********************************
+     * The optimization senses.
+     *********************************/
+    std::vector<BRKGA::Sense> senses;
 
     /*******************************************************
      * The minimum weight over all items on each dimension.

@@ -1,9 +1,6 @@
 #pragma once
 
-#define NSBRKGA_MULTIPLE_INCLUSIONS
-
 #include "solution/solution.hpp"
-#include "nsbrkga.hpp"
 #include <pagmo/population.hpp>
 
 namespace mokp {
@@ -17,11 +14,6 @@ class Solver {
      * The instance been solved.
      ****************************/
     Instance instance;
-
-    /*********************************
-     * The optimization senses.
-     *********************************/
-    std::vector<BRKGA::Sense> senses;
 
     /**************************
      * The decoder type

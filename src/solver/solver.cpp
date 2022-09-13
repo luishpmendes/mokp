@@ -3,8 +3,7 @@
 namespace mokp {
 
 Solver::Solver(const Instance & instance)
-    : instance(instance),
-      senses(instance.num_dimensions, BRKGA::Sense::MAXIMIZE) {
+    : instance(instance) {
     this->set_seed(this->seed);
 }
 
@@ -58,7 +57,7 @@ bool Solver::update_best_individuals(
     auto non_dominated_new_individuals =
         BRKGA::Population::nonDominatedSort<std::vector<double>>(
                 new_individuals,
-                this->senses).front();
+                this->instance.senses).front();
 
     for (const auto & new_individual : non_dominated_new_individuals) {
         bool is_dominated_or_equal = false;
@@ -147,7 +146,7 @@ void Solver::capture_snapshot(const pagmo::population & pop) {
 
     this->fronts = BRKGA::Population::nonDominatedSort<std::vector<double>>(
             current_individuals,
-            this->senses);
+            this->instance.senses);
 
     this->num_non_dominated_snapshots.push_back(std::make_tuple(
                 this->num_iterations,

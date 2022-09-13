@@ -4,6 +4,9 @@
 namespace mokp {
 
 void Instance::init() {
+    this->senses = std::vector<BRKGA::Sense>(this->num_dimensions,
+                                             BRKGA::Sense::MAXIMIZE);
+
     // Compute the minimum weight
     for (unsigned j = 0; j < this->num_dimensions; j++) {
         this->min_weight[j] = this->weight[0][j];
@@ -63,6 +66,7 @@ Instance Instance::operator = (const Instance & instance) {
     this->value = instance.value;
     this->num_dimensions = instance.num_dimensions;
     this->num_items = instance.num_items;
+    this->senses = instance.senses;
     this->min_weight = instance.min_weight;
     this->greedy_permutation = instance.greedy_permutation;
     this->greedy_weight = instance.greedy_weight;

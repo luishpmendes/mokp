@@ -69,9 +69,6 @@ void NSBRKGA_Solver::solve() {
                     this->decoder_type,
                     this->num_threads);
 
-    this->senses = std::vector<BRKGA::Sense>(this->instance.num_dimensions,
-                                             BRKGA::Sense::MAXIMIZE);
-
     BRKGA::BrkgaParams params;
     params.num_incumbent_solutions = this->max_num_solutions;
     params.population_size = this->population_size;
@@ -92,7 +89,7 @@ void NSBRKGA_Solver::solve() {
     params.pr_percentage = this->pr_percentage;
 
     BRKGA::NSBRKGA algorithm(decoder,
-                             this->senses,
+                             this->instance.senses,
                              this->seed,
                              this->instance.num_items,
                              params,
