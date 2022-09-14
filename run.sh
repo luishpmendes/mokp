@@ -21,7 +21,7 @@ population_size[zlt_750_4]=352
 
 num_processes=6
 
-time_limit=3600
+time_limit=1800
 max_num_solutions=500
 max_num_snapshots=60
 
