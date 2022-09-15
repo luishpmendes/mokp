@@ -4,6 +4,8 @@ import os
 import seaborn as sns
 from plotter_definitions import *
 
+dirname = os.path.dirname(__file__)
+
 for m in ms:
     for instance in instances_per_m[m]:
         for version in versions:
@@ -15,7 +17,7 @@ for m in ms:
             for solver in solvers:
                 num_snapshots = 0
                 while True:
-                    filename = "best_solutions_snapshots/" + instance + "_" + solver + "_" + version + "_" + str(num_snapshots) +  ".txt"
+                    filename = os.path.join(dirname, "best_solutions_snapshots/" + instance + "_" + solver + "_" + version + "_" + str(num_snapshots) +  ".txt")
                     if not os.path.exists(filename):
                         break
                     with open(filename) as csv_file:
@@ -38,7 +40,7 @@ for m in ms:
                 fig.set_size_inches(5.0 * m, 5.0 * m)
                 fig.suptitle(instance, fontsize = "xx-large")
                 for i in range(len(solvers)):
-                    filename = "best_solutions_snapshots/" + instance + "_" + solvers[i] + "_" + version + "_" + str(snapshot) +  ".txt"
+                    filename = os.path.join(dirname, "best_solutions_snapshots/" + instance + "_" + solvers[i] + "_" + version + "_" + str(snapshot) +  ".txt")
                     if os.path.exists(filename):
                         ys = []
                         for j in range(m):
@@ -66,4 +68,5 @@ for m in ms:
                                     axs[j][k].scatter(x = ys[k], y = ys[j], color = colors[i], label = solver_labels[solvers[i]], marker = (i + 3, 2, 0), alpha = 0.80)
                                     axs[j][k].legend(loc = "best", fontsize = "large")
                 plt.subplots_adjust(wspace = 0.15 + 0.05 * m, hspace = 0.15 + 0.05 * m)
-                plt.savefig("best_solutions_snapshots/" + instance + "_" + version + "_" + str(snapshot) + ".png", format = "png")
+                filename = os.path.join(dirname, "best_solutions_snapshots/" + instance + "_" + version + "_" + str(snapshot) + ".png")
+                plt.savefig(filename, format = "png")

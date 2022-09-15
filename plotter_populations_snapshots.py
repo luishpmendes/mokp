@@ -7,7 +7,9 @@ import seaborn as sns
 from math import ceil, floor, sqrt
 from plotter_definitions import *
 
-matplotlib.use('agg')
+matplotlib.use("agg")
+
+dirname = os.path.dirname(__file__)
 
 num_rows = floor(sqrt(len(solvers)))
 num_cols = ceil((len(solvers)) / num_rows)
@@ -23,7 +25,7 @@ for m in ms:
             for solver in solvers:
                 num_snapshots = 0
                 while True:
-                    filename = "populations_snapshots/" + instance + "_" + solver + "_" + version + "_" + str(num_snapshots) +  ".txt"
+                    filename = os.path.join(dirname, "populations_snapshots/" + instance + "_" + solver + "_" + version + "_" + str(num_snapshots) + ".txt")
                     if not os.path.exists(filename):
                         break
                     with open(filename) as csv_file:
@@ -50,7 +52,7 @@ for m in ms:
                     col = i % num_cols
                     figs[row][col].suptitle(solver_labels[solvers[i]], fontsize = "x-large")
                     axs = figs[row][col].subplots(nrows = m, ncols = m)
-                    filename = "populations_snapshots/" + instance + "_" + solvers[i] + "_" + version + "_" + str(snapshot) + ".txt"
+                    filename = os.path.join(dirname, "populations_snapshots/" + instance + "_" + solvers[i] + "_" + version + "_" + str(snapshot) + ".txt")
                     if os.path.exists(filename):
                         ys = []
                         for j in range(m):
@@ -76,7 +78,7 @@ for m in ms:
                                     axs[j][k].set_xlabel(xlabel = "$f_{" + str(k + 1) + "}$", fontsize = "large")
                                     axs[j][k].set_ylabel(ylabel = "$f_{" + str(j + 1) + "}$", fontsize = "large")
                                     axs[j][k].scatter(x = ys[k], y = ys[j], color = colors[i], marker = (i + 3, 2, 0), alpha = 0.50)
-                    filename = "best_solutions_snapshots/" + instance + "_" + solvers[i] + "_" + version + "_" + str(snapshot) + ".txt"
+                    filename = os.path.join(dirname, "best_solutions_snapshots/" + instance + "_" + solvers[i] + "_" + version + "_" + str(snapshot) + ".txt")
                     if os.path.exists(filename):
                         ys = []
                         for j in range(m):
@@ -95,14 +97,15 @@ for m in ms:
                             axs[j][j].set_ylabel(ylabel = "Density", fontsize = "large")
                             sns.kdeplot(data = ys[j], ax = axs[j][j], color = colors2[i], marker = (i + 3, 2, 0), alpha = 0.75)
                             for k in range(m):
-                                if j != l:
+                                if j != k:
                                     axs[j][k].set_xlim(left = min_ys[k], right = max_ys[k])
                                     axs[j][k].set_ylim(bottom = min_ys[j], top = max_ys[j])
                                     axs[j][k].set_xlabel(xlabel = "$f_{" + str(k + 1) + "}$", fontsize = "large")
                                     axs[j][k].set_ylabel(ylabel = "$f_{" + str(j + 1) + "}$", fontsize = "large")
                                     axs[j][k].scatter(x = ys[k], y = ys[j], color = colors2[i], marker = (i + 3, 2, 0), alpha = 0.75)
                 fig.suptitle(instance, fontsize = "xx-large")
-                plt.savefig("populations_snapshots/" + instance + "_" + version + "_" + str(snapshot) + ".png", format = "png")
+                filename = os.path.join(dirname, "populations_snapshots/" + instance + "_" + version + "_" + str(snapshot) + ".png")
+                plt.savefig(filename, format = "png")
                 plt.close(fig)
                 plt.cla()
                 del fig
