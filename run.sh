@@ -111,9 +111,9 @@ do
     final_command+="$command & "
 done
 
-eval $final_command
+# eval $final_command
 
-wait
+# wait
 
 commands=()
 
@@ -161,9 +161,9 @@ do
     final_command+="$command & "
 done
 
-eval $final_command
+# eval $final_command
 
-wait
+# wait
 
 commands=()
 
