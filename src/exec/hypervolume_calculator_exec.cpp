@@ -270,8 +270,8 @@ int main(int argc, char * argv[]) {
                             normalized_pareto_snapshot[k][l] =
                                 - (best_solutions_snapshots[i][j][k][l] -
                                    min_value[l]) / (max_value[l] - min_value[l]);
-                            assert(normalized_pareto_snapshot[k][l] >= 0.0);
-                            assert(normalized_pareto_snapshot[k][l] <= 1.0);
+                            assert(normalized_pareto_snapshot[k][l] >= - 1.0);
+                            assert(normalized_pareto_snapshot[k][l] <=   0.0);
                         }
                     }
 
