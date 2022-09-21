@@ -61,7 +61,7 @@ for m in ms:
                             axs[j][j].legend(loc = "best", fontsize = "large")
                             for k in range(m):
                                 if (j != k):
-                                    axs[j][k].set_xlim(left = min_ys[k], right = max_ys[l])
+                                    axs[j][k].set_xlim(left = min_ys[k], right = max_ys[k])
                                     axs[j][k].set_ylim(bottom = min_ys[j], top = max_ys[j])
                                     axs[j][k].set_xlabel(xlabel = "$f_{" + str(k + 1) + "}$", fontsize = "x-large")
                                     axs[j][k].set_ylabel(ylabel = "$f_{" + str(j + 1) + "}$", fontsize = "x-large")
