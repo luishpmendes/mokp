@@ -430,14 +430,14 @@ do
         echo "Instance ${instance}"
         echo "Version ${version}"
 
-        ffmpeg -y -r 5 -i ${path}/best_solutions_snapshots/${instance}_${version}_%d.png -c:v libx264 -vf fps=60 -pix_fmt yuv420p ${path}/best_solutions_snapshots/${instance}_${version}.mp4 &
+        ffmpeg -y -r 5 -i ${path}/best_solutions_snapshots/${instance}_${version}_%d.png -c:v libx264 -vf fps=60 -pix_fmt yuv420p ${path}/best_solutions_snapshots/${instance}_${version}.mp4 
         # ffmpeg -y -r 5 -i ${path}/populations_snapshots/${instance}_${version}_%d.png -c:v libx264 -vf fps=60 -pix_fmt yuv420p ${path}/populations_snapshots/${instance}_${version}.mp4
 
-        wait
+        # wait
 
-        rm ${path}/best_solutions_snapshots/${instance}_${version}_*.png &
+        rm ${path}/best_solutions_snapshots/${instance}_${version}_*.png 
         # rm ${path}/populations_snapshots/${instance}_${version}_*.png
 
-        wait
+        # wait
     done
 done
