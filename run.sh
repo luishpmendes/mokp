@@ -421,7 +421,7 @@ done
 python3 ${path}/plotter_best_solutions_snapshots.py 
 # python3 ${path}/plotter_populations_snapshots.py
 
-wait
+# wait
 
 for instance in ${instances[@]}
 do
