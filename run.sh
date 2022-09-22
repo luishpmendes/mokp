@@ -111,9 +111,9 @@ do
     final_command+="$command & "
 done
 
-# eval $final_command
+eval $final_command
 
-# wait
+wait
 
 commands=()
 
@@ -161,9 +161,9 @@ do
     final_command+="$command & "
 done
 
-# eval $final_command
+eval $final_command
 
-# wait
+wait
 
 commands=()
 
@@ -213,9 +213,9 @@ do
     final_command+="$command & "
 done
 
-# eval $final_command
+eval $final_command
 
-# wait
+wait
 
 commands=()
 
@@ -265,9 +265,9 @@ do
     final_command+="$command & "
 done
 
-# eval $final_command
+eval $final_command
 
-# wait
+wait
 
 commands=()
 
@@ -317,9 +317,9 @@ do
     final_command+="$command & "
 done
 
-# eval $final_command
+eval $final_command
 
-# wait
+wait
 
 commands=()
 
@@ -404,24 +404,24 @@ do
     final_command+="$command & "
 done
 
-# eval $final_command
+eval $final_command
 
-# wait
+wait
 
-# python3 ${path}/plotter_hypervolume.py &
-# python3 ${path}/plotter_hypervolume_snapshots.py &
-# python3 ${path}/plotter_igd_plus.py &
-# python3 ${path}/plotter_igd_plus_snapshots.py &
-# python3 ${path}/plotter_multiplicative_epsilon.py &
-# python3 ${path}/plotter_multiplicative_epsilon_snapshots.py &
-# python3 ${path}/plotter_num_non_dominated_snapshots.py &
-# python3 ${path}/plotter_num_fronts_snapshots.py &
-# python3 ${path}/plotter_num_elites_snapshots.py &
-# python3 ${path}/plotter_pareto.py &
-python3 ${path}/plotter_best_solutions_snapshots.py 
-# python3 ${path}/plotter_populations_snapshots.py
+python3 ${path}/plotter_hypervolume.py &
+python3 ${path}/plotter_hypervolume_snapshots.py &
+python3 ${path}/plotter_igd_plus.py &
+python3 ${path}/plotter_igd_plus_snapshots.py &
+python3 ${path}/plotter_multiplicative_epsilon.py &
+python3 ${path}/plotter_multiplicative_epsilon_snapshots.py &
+python3 ${path}/plotter_num_non_dominated_snapshots.py &
+python3 ${path}/plotter_num_fronts_snapshots.py &
+python3 ${path}/plotter_num_elites_snapshots.py &
+python3 ${path}/plotter_pareto.py &
+python3 ${path}/plotter_best_solutions_snapshots.py &
+python3 ${path}/plotter_populations_snapshots.py
 
-# wait
+wait
 
 for instance in ${instances[@]}
 do
@@ -430,14 +430,14 @@ do
         echo "Instance ${instance}"
         echo "Version ${version}"
 
-        ffmpeg -y -r 5 -i ${path}/best_solutions_snapshots/${instance}_${version}_%d.png -c:v libx264 -vf fps=60 -pix_fmt yuv420p ${path}/best_solutions_snapshots/${instance}_${version}.mp4 
-        # ffmpeg -y -r 5 -i ${path}/populations_snapshots/${instance}_${version}_%d.png -c:v libx264 -vf fps=60 -pix_fmt yuv420p ${path}/populations_snapshots/${instance}_${version}.mp4
+        ffmpeg -y -r 5 -i ${path}/best_solutions_snapshots/${instance}_${version}_%d.png -c:v libx264 -vf fps=60 -pix_fmt yuv420p ${path}/best_solutions_snapshots/${instance}_${version}.mp4 &
+        ffmpeg -y -r 5 -i ${path}/populations_snapshots/${instance}_${version}_%d.png -c:v libx264 -vf fps=60 -pix_fmt yuv420p ${path}/populations_snapshots/${instance}_${version}.mp4
 
-        # wait
+        wait
 
-        rm ${path}/best_solutions_snapshots/${instance}_${version}_*.png 
-        # rm ${path}/populations_snapshots/${instance}_${version}_*.png
+        rm ${path}/best_solutions_snapshots/${instance}_${version}_*.png &
+        rm ${path}/populations_snapshots/${instance}_${version}_*.png
 
-        # wait
+        wait
     done
 done
