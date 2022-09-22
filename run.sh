@@ -2,7 +2,7 @@
 
 instances=(zlt_100_2 zlt_250_2 zlt_500_2 zlt_750_2 zlt_100_3 zlt_250_3 zlt_500_3 zlt_750_3 zlt_100_4 zlt_250_4 zlt_500_4 zlt_750_4)
 solvers=(nsga2 nspso moead mhaco ihs nsbrkga)
-seeds=(953144296 978387430 226105561 727358244 393093272)
+seeds=(660561053 944703414 784358398 329424005 592324318)
 versions=(best median)
 
 declare -A population_size
