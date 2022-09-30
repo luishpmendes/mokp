@@ -1,20 +1,20 @@
 Number of dimensions: 2
 Number of items: 750
 Decoder type: 1
-Seed: 944703414
+Seed: 660561053
 Time limit: 1800
 Iterations limit: 4294967295
 Initial individuals: 0
 Maximum number of solutions: 500
 Maximum number of snapshots: 60
-Number of iterations: 41234
-Solutions obtained: 240
-Solving time: 1800.04
+Number of iterations: 46649
+Solutions obtained: 255
+Solving time: 1800.06
 Number of snapshots: 61
 Time between snapshots: 30
-Time when the last snapshot was taken: 1800.03
+Time when the last snapshot was taken: 1800.04
 Number of iterations between the snapshots: 71582788
-Iteration when the last snapshot was taken: 41234
+Iteration when the last snapshot was taken: 46649
 Number of individuals in each population: 252
 Minimum percentage of individuals to become the elite set: 0.1
 Maximum percentage of individuals to become the elite set: 0.5
@@ -35,13 +35,13 @@ The intensity of the shaking: 10
 Interval at which the populations are reset: 500
 The intensity of the reset: 0.5
 Number of threads to be used during parallel decoding: 1
-Last update generation: 41210
-Last update time: 1799.28
-Largest number of generations between improvements: 528
+Last update generation: 46607
+Last update time: 1798.12
+Largest number of generations between improvements: 533
 Total path relink time: 0
 Total path relink calls: 0
 Number of homogeneities: 0
 Improvements in the elite set: 0
 Best individual improvements: 0
-Total shakings calls: 58
-Total resets calls: 4
+Total shakings calls: 37
+Total resets calls: 2
