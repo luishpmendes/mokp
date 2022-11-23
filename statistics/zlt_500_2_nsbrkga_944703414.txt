@@ -7,14 +7,14 @@ Iterations limit: 4294967295
 Initial individuals: 0
 Maximum number of solutions: 500
 Maximum number of snapshots: 60
-Number of iterations: 143689
+Number of iterations: 171418
 Solutions obtained: 257
 Solving time: 3600.01
 Number of snapshots: 61
 Time between snapshots: 60
 Time when the last snapshot was taken: 3600.01
 Number of iterations between the snapshots: 71582788
-Iteration when the last snapshot was taken: 143689
+Iteration when the last snapshot was taken: 171418
 Number of individuals in each population: 200
 Minimum percentage of individuals to become the elite set: 0.1
 Maximum percentage of individuals to become the elite set: 0.5
@@ -28,20 +28,20 @@ Number of independent parallel populations: 1
 Number of pairs of chromosomes to be tested to path-relinking: 100
 Minimum distance between chromosomes selected to path-relinking: 0.15
 Individual selection to path-relinking: BESTSOLUTION
-Percentage of the path to be computed: 0.31
-Interval at which the path relink is applied: 0
+Percentage of the path to be computed: 0.3
+Interval at which the path relink is applied: 200
 Interval at which the populations are shaken: 200
 The intensity of the shaking: 10
 Interval at which the populations are reset: 500
 The intensity of the reset: 0.5
 Number of threads to be used during parallel decoding: 1
-Last update generation: 141532
-Last update time: 3540.79
-Largest number of generations between improvements: 6465
-Total path relink time: 0
-Total path relink calls: 0
+Last update generation: 169400
+Last update time: 3566.23
+Largest number of generations between improvements: 8600
+Total path relink time: 6.94518
+Total path relink calls: 857
 Number of homogeneities: 0
-Improvements in the elite set: 0
-Best individual improvements: 0
-Total shakings calls: 489
-Total resets calls: 137
+Improvements in the elite set: 7
+Best individual improvements: 7
+Total shakings calls: 623
+Total resets calls: 186
