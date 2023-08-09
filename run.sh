@@ -24,6 +24,7 @@ num_processes=6
 time_limit=3600
 max_num_solutions=500
 max_num_snapshots=60
+max_ref_solutions=800
 
 path=$(dirname $(realpath $0))
 
@@ -130,6 +131,7 @@ for instance in ${instances[@]}
 do
     command="${path}/bin/exec/reference_pareto_front_calculator_exec "
     command+="--instance ${path}/instances/${instance}.txt "
+    command+="--max-num-solutions ${max_ref_solutions} "
     j=0;
     for solver in ${solvers[@]}
     do
