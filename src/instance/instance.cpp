@@ -4,8 +4,8 @@
 namespace mokp {
 
 void Instance::init() {
-    this->senses = std::vector<BRKGA::Sense>(this->num_dimensions,
-                                             BRKGA::Sense::MAXIMIZE);
+    this->senses.resize(this->num_dimensions, BRKGA::Sense::MAXIMIZE);
+    this->senses.assign(this->num_dimensions, BRKGA::Sense::MAXIMIZE);
 
     // Compute the minimum weight
     for (unsigned j = 0; j < this->num_dimensions; j++) {
@@ -202,7 +202,7 @@ std::istream & operator >>(std::istream & is, Instance & instance) {
     return is;
 }
 
-std::ostream & operator <<(std::ostream & os, Instance & instance) {
+std::ostream & operator <<(std::ostream & os, const Instance & instance) {
     os << instance.num_dimensions << ' ' << instance.num_items << std::endl;
 
     for (unsigned j = 0; j < instance.num_dimensions; j++) {
