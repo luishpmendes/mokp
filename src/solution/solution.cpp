@@ -11,21 +11,17 @@ bool Solution::dominates(const std::vector<double> & valueA,
         return false;
     }
 
-    // Checks if valueA is at least as good as valueB
-    for (unsigned i = 0; i < valueA.size(); i++) {
+    bool at_least_as_good = true, better = false;
+
+    for (std::size_t i = 0; i < valueA.size() && at_least_as_good; i++) {
         if (valueA[i] < valueB[i] - std::numeric_limits<double>::epsilon()) {
-            return false;
+            at_least_as_good =  false;
+        } else if (valueA[i] > valueB[i] + std::numeric_limits<double>::epsilon()) {
+            better = true;
         }
     }
 
-    // Checks if valueA is better than valueB
-    for (unsigned i = 0; i < valueA.size(); i++) {
-        if (valueA[i] > valueB[i] + std::numeric_limits<double>::epsilon()) {
-            return true;
-        }
-    }
-
-    return false;
+    return at_least_as_good && better;
 }
 
 Solution::Solution(const Instance & instance,
@@ -258,7 +254,7 @@ std::istream & operator >>(std::istream & is, Solution & solution) {
     return is;
 }
 
-std::ostream & operator <<(std::ostream & os, Solution & solution) {
+std::ostream & operator <<(std::ostream & os, const Solution & solution) {
     for (unsigned i = 0; i < solution.instance.num_items - 1; i++) {
         os << solution.knapsack[i] << ' ';
     }
