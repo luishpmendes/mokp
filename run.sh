@@ -19,6 +19,20 @@ population_size[zlt_750_2]=252
 population_size[zlt_750_3]=300
 population_size[zlt_750_4]=352
 
+declare -A num_exchange_individuals
+num_exchange_individuals[zlt_100_2]=15
+num_exchange_individuals[zlt_100_3]=20
+num_exchange_individuals[zlt_100_4]=25
+num_exchange_individuals[zlt_250_2]=15
+num_exchange_individuals[zlt_250_3]=20
+num_exchange_individuals[zlt_250_4]=25
+num_exchange_individuals[zlt_500_2]=20
+num_exchange_individuals[zlt_500_3]=25
+num_exchange_individuals[zlt_500_4]=30
+num_exchange_individuals[zlt_750_2]=25
+num_exchange_individuals[zlt_750_3]=30
+num_exchange_individuals[zlt_750_4]=35
+
 num_processes=6
 
 time_limit=3600
@@ -86,6 +100,7 @@ do
             fi
             if [ $solver = "nsbrkga" ]
             then
+                command+="--num-exchange-individuals ${num_exchange_individuals[${instance}]} "
                 command+="--num-elites-snapshots ${path}/num_elites_snapshots/${instance}_${solver}_${seed}.txt "
             fi
             if [ $i -lt $num_processes ]
