@@ -35,7 +35,7 @@ num_exchange_individuals[zlt_750_4]=35
 
 num_processes=6
 
-time_limit=300
+time_limit=600
 max_num_solutions=500
 max_num_snapshots=60
 max_ref_solutions=800
