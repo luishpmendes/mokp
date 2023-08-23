@@ -1,0 +1,25 @@
+Number of dimensions: 4
+Number of items: 750
+Decoder type: 1
+Seed: 935899510
+Time limit: 600
+Iterations limit: 4294967295
+Initial individuals: 0
+Maximum number of solutions: 500
+Maximum number of snapshots: 60
+Number of iterations: 8082
+Solutions obtained: 500
+Solving time: 600.07
+Number of snapshots: 61
+Time between snapshots: 300
+Time when the last snapshot was taken: 600.038
+Number of iterations between the snapshots: 0
+Iteration when the last snapshot was taken: 8082
+Population size: 352
+Number of solutions stored in the solution archive: 63
+Convergence speed: 1
+Threshold: 1
+nGenMark: 7
+EvalStop: 0
+Focus: 0
+Memory: 1
