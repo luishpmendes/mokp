@@ -42,7 +42,7 @@ class Instance {
     /*********************************
      * The optimization senses.
      *********************************/
-    std::vector<BRKGA::Sense> senses;
+    std::vector<NSBRKGA::Sense> senses;
 
     /*******************************************************
      * The minimum weight over all items on each dimension.

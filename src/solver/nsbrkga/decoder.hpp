@@ -23,7 +23,7 @@ class Decoder {
             unsigned decoder_type,
             unsigned num_threads);
 
-    std::vector<double> decode(BRKGA::Chromosome & chromosome, bool rewrite);
+    std::vector<double> decode(NSBRKGA::Chromosome & chromosome, bool rewrite);
 };
 
 }

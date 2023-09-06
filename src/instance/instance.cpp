@@ -4,8 +4,8 @@
 namespace mokp {
 
 void Instance::init() {
-    this->senses.resize(this->num_dimensions, BRKGA::Sense::MAXIMIZE);
-    this->senses.assign(this->num_dimensions, BRKGA::Sense::MAXIMIZE);
+    this->senses.resize(this->num_dimensions, NSBRKGA::Sense::MAXIMIZE);
+    this->senses.assign(this->num_dimensions, NSBRKGA::Sense::MAXIMIZE);
 
     // Compute the minimum weight
     for (unsigned j = 0; j < this->num_dimensions; j++) {

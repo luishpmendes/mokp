@@ -18,7 +18,7 @@ Decoder::Decoder(const Instance & instance,
                    std::vector<std::pair<double, unsigned>>(
                         instance.num_items)) {}
 
-std::vector<double> Decoder::decode(BRKGA::Chromosome & chromosome,
+std::vector<double> Decoder::decode(NSBRKGA::Chromosome & chromosome,
                                     bool /* not used */) {
 #   ifdef _OPENMP
         std::vector<bool> & greedy_knapsack
