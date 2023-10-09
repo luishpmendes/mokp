@@ -1,7 +1,8 @@
 #!/bin/bash
 
 instances=(zlt_100_2 zlt_250_2 zlt_500_2 zlt_750_2 zlt_100_3 zlt_250_3 zlt_500_3 zlt_750_3 zlt_100_4 zlt_250_4 zlt_500_4 zlt_750_4)
-solvers=(nsga2 nspso moead mhaco ihs nsbrkga)
+# solvers=(nsga2 nspso moead mhaco ihs nsbrkga)
+solvers=(nsbrkga)
 seeds=(355841728 682375620 147607335 606401489 935899510)
 versions=(best median)
 
