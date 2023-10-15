@@ -1,0 +1,24 @@
+Number of dimensions: 4
+Number of items: 250
+Decoder type: 1
+Seed: 682375620
+Time limit: 600
+Iterations limit: 4294967295
+Initial individuals: 0
+Maximum number of solutions: 500
+Maximum number of snapshots: 60
+Factor at which the time between snapshots are increased: 1.16547
+Factor at which the iterations between snapshots are increased: 1
+Number of iterations: 20034
+Solutions obtained: 500
+Solving time: 600.023
+Number of snapshots: 60
+Time next snapshot: 600.023
+Time when the last snapshot was taken: 600.016
+Number of iteration of the next snapshot: 4294967295
+Iteration when the last snapshot was taken: 20034
+Population size: 252
+Crossover probability: 0.8
+Distribution index for crossover: 10
+Mutation probability: 0.006
+Distribution index for mutation: 50
