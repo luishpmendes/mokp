@@ -1,9 +1,8 @@
 #!/bin/bash
 
 instances=(zlt_100_2 zlt_250_2 zlt_500_2 zlt_750_2 zlt_100_3 zlt_250_3 zlt_500_3 zlt_750_3 zlt_100_4 zlt_250_4 zlt_500_4 zlt_750_4)
-# solvers=(nsga2 nspso moead mhaco ihs nsbrkga)
-solvers=(nsbrkga)
-seeds=(355841728 682375620 147607335 606401489 935899510)
+solvers=(nsga2 nspso moead mhaco ihs nsbrkga)
+seeds=(305089489 511812191 608055156 467424509 944441939 414977408 819312498 562386085 287613914 755772793)
 versions=(best median)
 
 declare -A population_size
@@ -36,9 +35,9 @@ num_exchange_individuals[zlt_750_4]=35
 
 num_processes=6
 
-time_limit=600
+time_limit=1800
 max_num_solutions=500
-max_num_snapshots=60
+max_num_snapshots=30
 max_ref_solutions=800
 
 path=$(dirname $(realpath $0))
