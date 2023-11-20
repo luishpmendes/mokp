@@ -1,7 +1,7 @@
 #!/bin/bash
 
 instances=(zlt_100_2 zlt_250_2 zlt_500_2 zlt_750_2 zlt_100_3 zlt_250_3 zlt_500_3 zlt_750_3 zlt_100_4 zlt_250_4 zlt_500_4 zlt_750_4)
-solvers=(nsga2 nspso moead mhaco ihs nsbrkga)
+solvers=(nsga2 nspso moead mhaco ihs nsbrkga nsbrkga-pr)
 seeds=(305089489 511812191 608055156 467424509 944441939 414977408 819312498 562386085 287613914 755772793)
 versions=(best median)
 
@@ -74,7 +74,12 @@ do
     do
         for seed in ${seeds[@]}
         do
-            command="${path}/bin/exec/${solver}_solver_exec "
+            if [ $solver = "nsbrkga-pr" ]
+            then
+                command="${path}/bin/exec/nsbrkga_solver_exec "
+            else
+                command="${path}/bin/exec/${solver}_solver_exec "
+            fi
             command+="--instance ${path}/instances/${instance}.txt "
             command+="--seed ${seed} "
             command+="--time-limit ${time_limit} "
@@ -105,6 +110,12 @@ do
                 command+="--num-exchange-individuals ${num_exchange_individuals[${instance}]} "
                 command+="--num-elites-snapshots ${path}/num_elites_snapshots/${instance}_${solver}_${seed}.txt "
             fi
+            if [ $solver = "nsbrkga-pr" ]
+            then
+                command+="--num-exchange-individuals ${num_exchange_individuals[${instance}]} "
+                command+="--num-elites-snapshots ${path}/num_elites_snapshots/${instance}_nsbrkga_${seed}.txt "
+                command+="--pr-interval 500 "
+            fi
             if [ $i -lt $num_processes ]
             then
                 commands[$i]+="$command"
@@ -133,7 +144,7 @@ eval $final_command
 
 wait
 
-solvers=(nsga2 nspso moead mhaco ihs nsbrkga)
+solvers=(nsga2 nspso moead mhaco ihs nsbrkga nsbrkga-pr)
 
 commands=()
 
@@ -381,6 +392,11 @@ do
             command+="--num-elites-snapshots-best ${path}/num_elites_snapshots/${instance}_${solver}_best.txt "
             command+="--num-elites-snapshots-median ${path}/num_elites_snapshots/${instance}_${solver}_median.txt "
         fi
+        if [ $solver = "nsbrkga-pr" ]
+        then
+            command+="--num-elites-snapshots-best ${path}/num_elites_snapshots/${instance}_${solver}_best.txt "
+            command+="--num-elites-snapshots-median ${path}/num_elites_snapshots/${instance}_${solver}_median.txt "
+        fi
         j=0;
         for seed in ${seeds[@]}
         do
@@ -397,6 +413,10 @@ do
             command+="--populations-snapshots-${j} ${path}/populations_snapshots/${instance}_${solver}_${seed}_ "
             command+="--num-fronts-snapshots-${j} ${path}/num_fronts_snapshots/${instance}_${solver}_${seed}.txt "
             if [ $solver = "nsbrkga" ]
+            then
+                command+="--num-elites-snapshots-${j} ${path}/num_elites_snapshots/${instance}_${solver}_${seed}.txt "
+            fi
+            if [ $solver = "nsbrkga-pr" ]
             then
                 command+="--num-elites-snapshots-${j} ${path}/num_elites_snapshots/${instance}_${solver}_${seed}.txt "
             fi
