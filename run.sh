@@ -113,7 +113,7 @@ do
             if [ $solver = "nsbrkga-pr" ]
             then
                 command+="--num-exchange-individuals ${num_exchange_individuals[${instance}]} "
-                command+="--num-elites-snapshots ${path}/num_elites_snapshots/${instance}_nsbrkga_${seed}.txt "
+                command+="--num-elites-snapshots ${path}/num_elites_snapshots/${instance}_${solver}_${seed}.txt "
                 command+="--pr-interval 500 "
                 command+="--max-num-snapshots 0 "
             fi
@@ -502,4 +502,4 @@ rm ${path}/metrics_snapshots/scatter_*.png
 
 wait
 
-python ${path}/metrics_stats.py > ${path}/metrics_stats.txt
+python3 ${path}/metrics_stats.py > ${path}/metrics_stats.txt
