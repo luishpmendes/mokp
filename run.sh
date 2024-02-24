@@ -1,7 +1,8 @@
 #!/bin/bash
 
 instances=(zlt_100_2 zlt_250_2 zlt_500_2 zlt_750_2 zlt_100_3 zlt_250_3 zlt_500_3 zlt_750_3 zlt_100_4 zlt_250_4 zlt_500_4 zlt_750_4)
-solvers=(nsga2 nspso moead mhaco ihs nsbrkga nsbrkga-pr)
+# solvers=(nsga2 nspso moead mhaco ihs nsbrkga nsbrkga-pr)
+solvers=(nsbrkga nsbrkga-pr)
 seeds=(305089489 511812191 608055156 467424509 944441939 414977408 819312498 562386085 287613914 755772793)
 versions=(best median)
 
@@ -115,7 +116,6 @@ do
                 command+="--num-exchange-individuals ${num_exchange_individuals[${instance}]} "
                 command+="--num-elites-snapshots ${path}/num_elites_snapshots/${instance}_${solver}_${seed}.txt "
                 command+="--pr-interval 500 "
-                command+="--max-num-snapshots 0 "
             fi
             if [ $i -lt $num_processes ]
             then
