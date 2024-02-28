@@ -1,14 +1,15 @@
 instances = ["zlt_100_2", "zlt_250_2", "zlt_500_2", "zlt_750_2",
              "zlt_100_3", "zlt_250_3", "zlt_500_3", "zlt_750_3",
              "zlt_100_4", "zlt_250_4", "zlt_500_4", "zlt_750_4"]
-solvers = ["nsga2", "nspso", "moead", "mhaco", "ihs", "nsbrkga", "nsbrkga-pr"]
+# solvers = ["nsga2", "nspso", "moead", "mhaco", "ihs", "nsbrkga", "nsbrkga-pr"]
+solvers = ["nsga2", "nspso", "moead", "mhaco", "ihs", "nsbrkga-pr"]
 solver_labels = {"nsga2": "NSGA-II",
                  "nspso": "NSPSO",
                  "moead": "MOEA/D-DE",
                  "mhaco": "MHACO",
                  "ihs": "IHS",
-                 "nsbrkga": "NS-BRKGA",
-                 "nsbrkga-pr": "NS-BRKGA + IPR"}
+                #  "nsbrkga": "NS-BRKGA",
+                 "nsbrkga-pr": "NS-BRKGA"}
 seeds = [305089489, 511812191, 608055156, 467424509, 944441939, 414977408, 819312498, 562386085, 287613914, 755772793]
 versions = ["best", "median"]
 colors = ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf", "#8c7e6e", "#738191"]
