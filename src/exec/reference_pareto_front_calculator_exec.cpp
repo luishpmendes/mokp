@@ -123,6 +123,13 @@ int main(int argc, char * argv[]) {
             }
         }
 
+        // Increase the value of each objective function by 5%.
+        for(std::pair<std::vector<double>, std::vector<double>> & solution : reference_pareto) {
+            for(double & value : solution.first) {
+                value *= 1.05;
+            }
+        }
+
         if(arg_parser.option_exists("--reference-pareto")) {
             std::ofstream ofs;
             ofs.open(arg_parser.option_value("--reference-pareto"));
