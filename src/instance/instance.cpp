@@ -39,6 +39,20 @@ void Instance::init() {
         this->greedy_weight[i] = this->weight[this->greedy_permutation[i]];
         this->greedy_value[i] = this->value[this->greedy_permutation[i]];
     }
+
+    // Compute the primal bound
+    this->primal_bound.resize(this->num_dimensions, 0.0);
+    this->primal_bound.assign(this->num_dimensions, 0.0);
+
+    for (unsigned j = 0; j < this->num_dimensions; j++) {
+        this->primal_bound[j] = this->value[0][j];
+
+        for (unsigned i = 1; i < this->num_items; i++) {
+            if (this->primal_bound[j] > this->value[i][j]) {
+                this->primal_bound[j] = this->value[i][j];
+            }
+        }
+    }
 }
 
 Instance::Instance(const std::vector<double> & capacity,

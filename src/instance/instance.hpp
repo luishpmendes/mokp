@@ -44,6 +44,11 @@ class Instance {
      *********************************/
     std::vector<NSBRKGA::Sense> senses;
 
+    /********************************
+     * This instance primal bounds.
+     ********************************/
+    std::vector<double> primal_bound;
+
     /*******************************************************
      * The minimum weight over all items on each dimension.
      *******************************************************/
