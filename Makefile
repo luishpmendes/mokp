@@ -265,6 +265,15 @@ $(BIN)/exec/multiplicative_epsilon_calculator_exec : $(BIN)/instance/instance.o 
 
 multiplicative_epsilon_calculator_exec : $(BIN)/exec/multiplicative_epsilon_calculator_exec
 
+$(BIN)/exec/instance_generator_exec : $(BIN)/utils/argument_parser.o \
+                                      $(BIN)/instance/instance.o \
+                                      $(BIN)/exec/instance_generator_exec.o
+	@echo "--> Linking objects..."
+	$(CPP) -o $@ $^ $(CARGS) $(INC)
+	@echo
+
+instance_generator_exec : $(BIN)/exec/instance_generator_exec
+
 tests : instance_test \
         solution_test \
 		nsga2_solver_test \
@@ -285,6 +294,7 @@ execs : instance_parser_exec \
 		results_aggregator_exec \
 		reference_pareto_front_calculator_exec \
 		modified_generational_distance_calculator_exec \
-		multiplicative_epsilon_calculator_exec
+		multiplicative_epsilon_calculator_exec \
+		instance_generator_exec
 
 all : tests execs
