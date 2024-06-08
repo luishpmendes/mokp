@@ -1,42 +1,13 @@
 #!/bin/bash
 
 instances=(zlt_100_2 zlt_250_2 zlt_500_2 zlt_750_2 zlt_1000_2 zlt_100_3 zlt_250_3 zlt_500_3 zlt_750_3 zlt_1000_3 zlt_100_4 zlt_250_4 zlt_500_4 zlt_750_4 zlt_1000_4)
-# solvers=(nsga2 nspso moead mhaco ihs nsbrkga)
-solvers=(nsbrkga)
+solvers=(nsga2 nspso moead mhaco ihs nsbrkga)
 seeds=(305089489 511812191 608055156 467424509 944441939 414977408 819312498 562386085 287613914 755772793)
 versions=(best median)
 
-declare -A population_size
-population_size[zlt_100_2]=152
-population_size[zlt_100_3]=200
-population_size[zlt_100_4]=252
-population_size[zlt_250_2]=152
-population_size[zlt_250_3]=200
-population_size[zlt_250_4]=252
-population_size[zlt_500_2]=200
-population_size[zlt_500_3]=252
-population_size[zlt_500_4]=300
-population_size[zlt_750_2]=252
-population_size[zlt_750_3]=300
-population_size[zlt_750_4]=352
-
-declare -A num_exchange_individuals
-num_exchange_individuals[zlt_100_2]=15
-num_exchange_individuals[zlt_100_3]=20
-num_exchange_individuals[zlt_100_4]=25
-num_exchange_individuals[zlt_250_2]=15
-num_exchange_individuals[zlt_250_3]=20
-num_exchange_individuals[zlt_250_4]=25
-num_exchange_individuals[zlt_500_2]=20
-num_exchange_individuals[zlt_500_3]=25
-num_exchange_individuals[zlt_500_4]=30
-num_exchange_individuals[zlt_750_2]=25
-num_exchange_individuals[zlt_750_3]=30
-num_exchange_individuals[zlt_750_4]=35
-
 num_processes=6
 
-time_limit=1800
+time_limit=900
 max_num_solutions=500
 max_num_snapshots=30
 max_ref_solutions=800
@@ -81,7 +52,6 @@ do
             command+="--time-limit ${time_limit} "
             command+="--max-num-solutions ${max_num_solutions} "
             command+="--max-num-snapshots ${max_num_snapshots} "
-            command+="--population-size ${population_size[${instance}]} "
             command+="--statistics ${path}/statistics/${instance}_${solver}_${seed}.txt "
             command+="--solutions ${path}/solutions/${instance}_${solver}_${seed}_ "
             command+="--pareto ${path}/pareto/${instance}_${solver}_${seed}.txt "
@@ -103,9 +73,7 @@ do
             fi
             if [ $solver = "nsbrkga" ]
             then
-                command+="--num-exchange-individuals ${num_exchange_individuals[${instance}]} "
                 command+="--num-elites-snapshots ${path}/num_elites_snapshots/${instance}_${solver}_${seed}.txt "
-                command+="--pr-interval 500 "
             fi
             if [ $i -lt $num_processes ]
             then
