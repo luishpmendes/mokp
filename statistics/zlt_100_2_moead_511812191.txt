@@ -2,23 +2,23 @@ Number of dimensions: 2
 Number of items: 100
 Decoder type: 1
 Seed: 511812191
-Time limit: 1800
+Time limit: 900
 Iterations limit: 4294967295
 Initial individuals: 0
 Maximum number of solutions: 500
 Maximum number of snapshots: 30
-Factor at which the time between snapshots are increased: 1.53642
+Factor at which the time between snapshots are increased: 1.4487
 Factor at which the iterations between snapshots are increased: 1
-Number of iterations: 314169
-Solutions obtained: 104
-Solving time: 1800
+Number of iterations: 77245
+Solutions obtained: 30
+Solving time: 900.002
 Number of snapshots: 30
-Time next snapshot: 1800.01
-Time when the last snapshot was taken: 1800
+Time next snapshot: 900.026
+Time when the last snapshot was taken: 900.001
 Number of iteration of the next snapshot: 4294967295
-Iteration when the last snapshot was taken: 314169
-Population size: 152
-Method used to generate the weights: low discrepancy
+Iteration when the last snapshot was taken: 77245
+Population size: 300
+Method used to generate the weights: random
 Decomposition method: tchebycheff
 Size of the weight’s neighborhood: 20
 Crossover parameter in the Differential Evolution operator: 1

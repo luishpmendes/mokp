@@ -1,23 +1,23 @@
 Number of dimensions: 3
 Number of items: 500
 Decoder type: 1
-Seed: 608055156
-Time limit: 1800
+Seed: 305089489
+Time limit: 900
 Iterations limit: 4294967295
 Initial individuals: 0
 Maximum number of solutions: 500
 Maximum number of snapshots: 30
-Factor at which the time between snapshots are increased: 1.41959
+Factor at which the time between snapshots are increased: 1.39404
 Factor at which the iterations between snapshots are increased: 1
-Number of iterations: 56888
-Solutions obtained: 297
-Solving time: 1800.02
+Number of iterations: 35191
+Solutions obtained: 248
+Solving time: 900.042
 Number of snapshots: 30
-Time next snapshot: 1800.07
-Time when the last snapshot was taken: 1800.01
+Time next snapshot: 900.059
+Time when the last snapshot was taken: 900.031
 Number of iteration of the next snapshot: 4294967295
-Iteration when the last snapshot was taken: 56888
-Population size: 252
+Iteration when the last snapshot was taken: 35191
+Population size: 300
 Number of solutions stored in the solution archive: 63
 Convergence speed: 1
 Threshold: 1
