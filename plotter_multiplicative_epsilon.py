@@ -94,7 +94,7 @@ for m in ms:
                         csv_file.close()
 
 plt.figure()
-plt.xlabel("Number of Objectives")
+plt.xlabel("Number of Knapsacks")
 plt.ylabel("Inverse Multiplicative Epsilon")
 plt.xticks(ms)
 plt.grid(alpha=0.5, color='gray', linestyle='dashed', linewidth=0.5, which='both')
@@ -114,7 +114,7 @@ plt.savefig(filename, format = "png")
 plt.close()
 
 plt.figure()
-plt.xlabel("Number of Objectives")
+plt.xlabel("Number of Knapsacks")
 plt.ylabel("Inverse Multiplicative Epsilon")
 plt.xticks(ms)
 plt.grid(alpha=0.5, color='gray', linestyle='dashed', linewidth=0.5, which='both')
