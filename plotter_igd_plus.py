@@ -24,26 +24,26 @@ delta_igd_plus = max_igd_plus - min_igd_plus
 min_igd_plus = max(min_igd_plus - round(0.025 * delta_igd_plus), 0.00)
 max_igd_plus = min(max_igd_plus + round(0.025 * delta_igd_plus), 1.00)
 
-for instance in instances:
-    plt.figure(figsize = (11, 11))
-    plt.title(instance, fontsize = "xx-large")
-    plt.xlabel("Modified Inverted Generational Distance", fontsize = "x-large")
-    xs = []
-    for solver in solvers:
-        filename = os.path.join(dirname, "igd_plus/" + instance + "_" + solver + ".txt")
-        x = []
-        with open(filename) as csv_file:
-            data = csv.reader(csv_file)
-            for row in data:
-                x.append(float(row[0]))
-        xs.append(x)
-    pt.half_violinplot(data = xs, palette = colors, orient = "h", width = 0.6, cut = 0.0, inner = None)
-    sns.stripplot(data = xs, palette = colors, orient = "h", size = 2, zorder = 0)
-    sns.boxplot(data = xs, orient = "h", width = 0.20, color = "black", zorder = 10, showcaps = True, boxprops = {'facecolor' : 'none', "zorder" : 10}, showfliers = True, whiskerprops = {'linewidth' : 2, "zorder" : 10}, flierprops = {'markersize' : 2})
-    plt.yticks(ticks = list(range(len(solvers))), labels = [solver_labels[solver] for solver in solvers], fontsize = "large")
-    filename = os.path.join(dirname, "igd_plus/" + instance + ".png")
-    plt.savefig(filename, format = "png")
-    plt.close()
+# for instance in instances:
+#     plt.figure(figsize = (11, 11))
+#     plt.title(instance, fontsize = "xx-large")
+#     plt.xlabel("Normalized Modified Inverted Generational Distance", fontsize = "x-large")
+#     xs = []
+#     for solver in solvers:
+#         filename = os.path.join(dirname, "igd_plus/" + instance + "_" + solver + ".txt")
+#         x = []
+#         with open(filename) as csv_file:
+#             data = csv.reader(csv_file)
+#             for row in data:
+#                 x.append(float(row[0]))
+#         xs.append(x)
+#     pt.half_violinplot(data = xs, palette = colors, orient = "h", width = 0.6, cut = 0.0, inner = None)
+#     sns.stripplot(data = xs, palette = colors, orient = "h", size = 2, zorder = 0)
+#     sns.boxplot(data = xs, orient = "h", width = 0.20, color = "black", zorder = 10, showcaps = True, boxprops = {'facecolor' : 'none', "zorder" : 10}, showfliers = True, whiskerprops = {'linewidth' : 2, "zorder" : 10}, flierprops = {'markersize' : 2})
+#     plt.yticks(ticks = list(range(len(solvers))), labels = [solver_labels[solver] for solver in solvers], fontsize = "large")
+#     filename = os.path.join(dirname, "igd_plus/" + instance + ".png")
+#     plt.savefig(filename, format = "png")
+#     plt.close()
 
 igd_plus = []
 
@@ -62,14 +62,14 @@ for instance in instances:
                     csv_file.close()
 
 plt.figure()
-plt.xlabel("Modified Inverted Generational Distance")
+plt.xlabel("Normalized Modified Inverted Generational Distance")
 pt.half_violinplot(data = igd_plus, palette = colors, orient = "h", width = 0.6, cut = 0.0, inner = None)
 sns.stripplot(data = igd_plus, palette = colors, orient = "h", size = 2, zorder = 0)
 sns.boxplot(data = igd_plus, orient = "h", width = 0.2, color = "black", zorder = 10, showcaps = True, boxprops = {'facecolor' : 'none', "zorder" : 10}, showfliers = True, whiskerprops = {'linewidth' : 2, "zorder" : 10}, flierprops = {'markersize' : 2})
 plt.yticks(ticks = list(range(len(solvers))), labels = [solver_labels[solver] for solver in solvers])
 plt.tight_layout()
 filename = os.path.join(dirname, "igd_plus/igd_plus.png")
-plt.savefig(filename, format = "png")
+# plt.savefig(filename, format = "png")
 plt.close()
 
 igd_plus_per_m = {}
@@ -93,7 +93,7 @@ for m in ms:
 
 plt.figure()
 plt.xlabel("Number of Knapsacks")
-plt.ylabel("Modified Inverted Generational Distance")
+plt.ylabel("Normalized Modified Inverted Generational Distance")
 plt.xticks(ms)
 plt.grid(alpha=0.5, color='gray', linestyle='dashed', linewidth=0.5, which='both')
 for i in range(len(solvers)):
@@ -108,12 +108,12 @@ plt.gca().yaxis.set_minor_formatter(FormatStrFormatter('%.2f'))
 plt.legend(loc = "upper left")
 plt.tight_layout()
 filename = os.path.join(dirname, "igd_plus/igd_plus_mean_per_m.png")
-plt.savefig(filename, format = "png")
+# plt.savefig(filename, format = "png")
 plt.close()
 
 plt.figure()
 plt.xlabel("Number of Knapsacks")
-plt.ylabel("Modified Inverted Generational Distance")
+plt.ylabel("Normalized Modified Inverted Generational Distance")
 plt.xticks(ms)
 plt.grid(alpha=0.5, color='gray', linestyle='dashed', linewidth=0.5, which='both')
 for i in range(len(solvers)):
@@ -137,7 +137,7 @@ plt.gca().yaxis.set_minor_formatter(FormatStrFormatter('%.2f'))
 plt.legend(loc = "best")
 plt.tight_layout()
 filename = os.path.join(dirname, "igd_plus/igd_plus_quartiles_per_m.png")
-plt.savefig(filename, format = "png")
+# plt.savefig(filename, format = "png")
 plt.close()
 
 igd_plus_per_size = {}
@@ -161,7 +161,7 @@ for size in sizes:
 
 plt.figure()
 plt.xlabel("Number of Items")
-plt.ylabel("Modified Inverted Generational Distance")
+plt.ylabel("Normalized Modified Inverted Generational Distance")
 plt.grid(alpha=0.5, color='gray', linestyle='dashed', linewidth=0.5, which='both')
 for i in range(len(solvers)):
     y = []
@@ -181,7 +181,7 @@ plt.close()
 
 plt.figure()
 plt.xlabel("Number of Items")
-plt.ylabel("Modified Inverted Generational Distance")
+plt.ylabel("Normalized Modified Inverted Generational Distance")
 plt.grid(alpha=0.5, color='gray', linestyle='dashed', linewidth=0.5, which='both')
 for i in range(len(solvers)):
     y0 = []
